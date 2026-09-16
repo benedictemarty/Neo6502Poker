@@ -71,14 +71,32 @@ static void title_screen(void) {
 }
 
 /* ---- table de jeu ---------------------------------------------------------- */
+#define PAY_X 188                    /* table des gains : colonne gauche, hauteur d'une ligne */
+#define PAY_Y(rank) (4 + ((rank) - 1) * 9)
+#define BLINK_TICKS 25               /* 3 s = 12 alternances de 250 ms */
+#define BLINK_COUNT 12
+
+/* Une ligne de la table des gains ; `lit` l'inverse (bandeau jaune, texte noir). */
+static void draw_payline(uint8_t rank, uint8_t lit) {
+    uint16_t y = PAY_Y(rank);
+    display_clear_rect(PAY_X, y - 1, 319, y + 8, lit ? COL_YELLOW : COL_TABLE);
+    display_text(190, y, lit ? COL_BLACK : COL_LIGHT, hand_label(rank));
+    snprintf(line, sizeof line, "%u", hand_payout[rank]);   /* aligné à droite */
+    display_text(316 - 6 * (uint16_t)strlen(line), y, lit ? COL_BLACK : COL_YELLOW, line);
+}
+
 static void draw_table(void) {
     display_clear_rect(0, 0, 319, 239, COL_TABLE);
     display_big_text(8, 8, COL_YELLOW, 2, "POKER");
     display_text(8, 28, COL_LIGHT, "NEO6502");
-    for (uint8_t i = 0; i < HAND_COUNT - 1; i++) {
-        display_text(190, 4 + i * 9, COL_LIGHT, hand_label(i + 1));
-        snprintf(line, sizeof line, "%u", hand_payout[i + 1]);   /* aligné à droite */
-        display_text(316 - 6 * (uint16_t)strlen(line), 4 + i * 9, COL_YELLOW, line);
+    for (uint8_t i = 1; i < HAND_COUNT; i++) draw_payline(i, 0);
+}
+
+/* Fait clignoter la ligne gagnante pendant 3 s, puis la laisse en l'état normal. */
+static void blink_payline(uint8_t rank) {
+    for (uint8_t i = 0; i < BLINK_COUNT; i++) {
+        draw_payline(rank, !(i & 1));
+        display_wait_ticks(BLINK_TICKS);
     }
 }
 
@@ -177,6 +195,7 @@ int main(void) {
                 if (game.result >= HAND_FOUR) sfx(API_SFX_FANFARE);
                 else if (game.win) sfx(API_SFX_VICTORY);
                 else sfx(API_SFX_NEGATIVE);
+                if (game.win) blink_payline(game.result);   /* son puis 3 s de clignotement */
             }
             break;
         case VP_WON:

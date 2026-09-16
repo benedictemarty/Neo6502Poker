@@ -45,6 +45,12 @@ k lignes et une hauteur 80/k (compression verticale gratuite), 20 ms par image ;
 faces sont chargées entre la fermeture et l'ouverture. Toutes les cartes qui changent sont
 animées dans la même passe.
 
+## Abattage gagnant
+Son (`API_SFX_VICTORY`, fanfare dès le carré) puis `blink_payline(rank)` : la ligne de la table
+des gains est redessinée 12 fois en alternant bandeau jaune / fond vert, 250 ms chacune (3 s),
+et retrouve son état normal. L'animation est bloquante ; les touches frappées pendant restent
+dans la file clavier du firmware (64 entrées).
+
 ## Écarts assumés par rapport au Poker ASN
 - La paire d'As paie (bug corrigé) ; 9-10-V-D-R assortis = quinte flush (bug corrigé).
 - Mise plafonnée à 10 ; doublement plafonné à 30 000 (l'ASN doublait sans limite).

@@ -2,6 +2,12 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.9.0] - 2026-09-16
+### Ajouté
+- À l'abattage gagnant : après le son (victoire, fanfare dès le carré), la ligne de la combinaison
+  gagnée clignote 3 s dans la table des gains (12 alternances bandeau jaune / normal, `blink_payline`).
+- Capture golden `win_blink` prise pendant le clignotement (24 tests).
+
 ## [0.8.0] - 2026-09-16
 ### Ajouté
 - Page « Crédits » (5ᵉ page de l'aide, FR/EN) : logiciel, machine Neo6502/Olimex, firmware (Paul Robson,

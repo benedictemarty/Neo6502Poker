@@ -54,6 +54,8 @@ def run(sd, keys, cycles, out, at=8_000_000):
     ("double_collect", " MMDDDNDNDRDRDRQ", 60_000_000, 9_350_000),
     # même donne, 4e pari perdu (N sur un K de carreau)
     ("double_lost", " MMDDDNDNDRDRDN", 60_000_000, 9_350_000),
+    # même donne, capture pendant les 3 s de clignotement : la ligne FULL est en surbrillance
+    ("win_blink", " MMDD", 15_600_000, 9_350_000),
 ])
 def test_golden(sd, name, keys, cycles, at, tmp_path):
     out = str(tmp_path / f"{name}.ppm")

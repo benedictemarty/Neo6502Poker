@@ -21,6 +21,7 @@ Un poker 32 cartes joueur-contre-machine sur Neo6502, fidèle à l'esprit des Po
 | 2 | 2026-09-16 | écran-titre, FR/EN, retournement animé, qualité des cartes (56×80, index pixel) | terminé |
 | 3 | 2026-09-16 | quitte ou double, sons | terminé |
 | 4 | 2026-09-16 | aide intégrée FR/EN illustrée (4 pages) | terminé |
+| 4b | 2026-09-16 | clignotement de la ligne gagnante (3 s) après le son de victoire | terminé |
 | 5 | à planifier | poker 2 joueurs façon Talvas : 32 cartes, enchères, IA (US-05) | à faire |
 
 ## Définition de « fini »
