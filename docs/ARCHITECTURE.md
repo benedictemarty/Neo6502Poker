@@ -29,8 +29,9 @@ make neo           # build/poker.neo (mos-neo6502-clang, ~7,5 Ko)
 make test-engine   # tests natifs (2 598 960 mains + machine à états)
 make test          # tests natifs + pytest
 ```
-Émulateur : `make run-emu` (Phosphoneo, `~/Phosphoneo`, avec `--storage` pointant sur un dossier
-contenant `cards.bin`), `make shot` pour une capture headless ; `tests/test_emulator.py` compare
+Émulateurs : `make run` lance l'émulateur officiel `~/Neo6502firmware/bin/neo` (fenêtre SDL2, jouable ;
+stockage = `build/storage/`), `make shot` fait une capture headless avec Phosphoneo (`~/Phosphoneo`,
+sans affichage) ; `tests/test_emulator.py` compare
 des captures de référence (le jeu est déterministe dans l'émulateur).
 
 Déploiement : copier `build/poker.neo` et `assets/cards/48x64/cards.bin` à la racine de la SD,

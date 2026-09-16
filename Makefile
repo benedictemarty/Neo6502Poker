@@ -7,7 +7,7 @@ BUILD    := build
 ENGINE_SRC := src/engine/cards.c src/engine/hand.c src/engine/videopoker.c
 NEO_SRC    := src/neo/main.c src/neo/display.c
 
-.PHONY: all neo test-engine test clean
+.PHONY: all neo test-engine test clean run run-emu shot
 
 all: neo
 
@@ -38,13 +38,18 @@ test: test-engine
 clean:
 	rm -rf $(BUILD)
 
-# --- émulateur Phosphoneo (~/Phosphoneo) --------------------------------------
-EMU ?= $(HOME)/Phosphoneo/build/phosphoneo
-SD  := $(BUILD)/sd
+# --- émulateurs -----------------------------------------------------------------
+# run  : émulateur officiel `neo` (fenêtre SDL2, jouable) ; le stockage est ./storage relatif au cwd
+# shot : Phosphoneo (headless, captures) — utilisé aussi par tests/test_emulator.py
+NEO_EMU ?= $(HOME)/Neo6502firmware/bin/neo
+EMU     ?= $(HOME)/Phosphoneo/build/phosphoneo
+SD      := $(BUILD)/sd
 
-run-emu: $(BUILD)/poker.neo
-	@mkdir -p $(SD) && cp assets/cards/48x64/cards.bin $(SD)/
-	$(EMU) $(BUILD)/poker.neo --storage $(SD)
+run: $(BUILD)/poker.neo
+	@mkdir -p $(BUILD)/storage && cp assets/cards/48x64/cards.bin $(BUILD)/storage/
+	cd $(BUILD) && $(NEO_EMU) poker.neo
+
+run-emu: run
 
 shot: $(BUILD)/poker.neo
 	@mkdir -p $(SD) && cp assets/cards/48x64/cards.bin $(SD)/

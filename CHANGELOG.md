@@ -2,6 +2,10 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.4.2] - 2026-09-16
+### Ajouté
+- `make run` : lance le jeu dans l'émulateur officiel `neo` (SDL2) ; Phosphoneo reste l'outil headless (`make shot`, tests).
+
 ## [0.4.1] - 2026-09-16
 ### Vérifié
 - `poker.neo` exécuté dans **Phosphoneo** (émulateur local headless) : chargement des cartes depuis
