@@ -1,5 +1,7 @@
 # Neo6502Poker
 
+Dépôts : [GitHub](https://github.com/benedictemarty/Neo6502Poker) · [Framagit](https://framagit.org/benedictemarty/Neo6502Poker)
+
 Portage / réécriture d'un jeu de poker (32 cartes, joueur contre machine) pour le **Neo6502**,
 inspiré des « Poker » édités pour l'Oric au début des années 80.
 

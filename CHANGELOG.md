@@ -2,6 +2,10 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.7.2] - 2026-09-16
+### Ajouté
+- Publication sur GitHub et Framagit (remotes `github` et `framegit`), liens dans le README.
+
 ## [0.7.1] - 2026-09-16
 ### Ajouté
 - `docs/JAQUETTE.md` : prompts (EN/FR, variante pixel art) pour générer la jaquette avec Nano Banana.
