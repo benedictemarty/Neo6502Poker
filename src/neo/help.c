@@ -69,6 +69,14 @@ static void illus_double(uint16_t y) {
     display_text(148, y + 52, COL_BLACK, T(S_GUESS));
 }
 
+/* Page 5 : la machine, en pixels : l'eventail du titre et le logo. */
+static void illus_credits(uint16_t y) {
+    zoom_box(8, y, 311, y + 40);
+    display_big_text(16, y + 8, COL_BLACK, 2, "NEO6502");
+    display_text(120, y + 10, COL_BLACK, "W65C02S @ 6.25 MHz");
+    display_text(120, y + 20, COL_BLACK, "320x240 - 16 couleurs / colours");
+}
+
 /* Page 4 : une ligne de la table des gains agrandie. */
 static void illus_payout(uint16_t y) {
     zoom_box(8, y, 311, y + 30);
@@ -88,6 +96,7 @@ static void draw_page(uint8_t page) {
     case 1: illus_hold(y); break;
     case 2: illus_double(y); break;
     case 3: illus_payout(y); break;
+    case 4: illus_credits(y); break;
     }
     const char *f = T(page + 1 < HELP_PAGES ? S_HELP_FOOT : S_HELP_FOOT_LAST);
     display_text((320 - text_w(f, 1)) / 2, 228, COL_YELLOW, f);

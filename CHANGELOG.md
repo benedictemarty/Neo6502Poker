@@ -2,6 +2,11 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.8.0] - 2026-09-16
+### Ajouté
+- Page « Crédits » (5ᵉ page de l'aide, FR/EN) : logiciel, machine Neo6502/Olimex, firmware (Paul Robson,
+  MIT), llvm-mos, Phosphoneo, cartes CC0, sons ; `CREDITS.md` et section dans le README.
+
 ## [0.7.2] - 2026-09-16
 ### Ajouté
 - Publication sur GitHub et Framagit (remotes `github` et `framegit`), liens dans le README.

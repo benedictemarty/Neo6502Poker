@@ -16,7 +16,7 @@ extern lang_t lang;
 const char *T(uint8_t id);                 /* texte dans la langue courante */
 const char *hand_label(hand_cat_t cat);    /* nom de la combinaison */
 
-#define HELP_PAGES 4
+#define HELP_PAGES 5
 const char *help_title(uint8_t page);
 const char *const *help_lines(uint8_t page);   /* lignes terminées par NULL */
 

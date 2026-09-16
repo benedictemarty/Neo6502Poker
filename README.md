@@ -30,6 +30,12 @@ Voir `docs/ARCHITECTURE.md`.
 - `tests/` — tests pytest (`python3 -m pytest -q tests`).
 - `CHANGELOG.md` — journal des modifications.
 
+## Crédits
+
+Voir [CREDITS.md](CREDITS.md) : jeu (Bénédicte MARTY, d'après ASN Diffusion 1983), machine Neo6502
+(Olimex ; firmware Paul Robson, MIT), llvm-mos, Phosphoneo, cartes CC0 de Dmitry Fomin. La page 5 de
+l'aide intégrée (touche H) reprend ces crédits en français et en anglais.
+
 ## Note sur « Poker ASN »
 
 Deux Poker Oric sont étudiés : celui d'**ASN Diffusion** (oric.org n° 1760, 1983, vidéo-poker

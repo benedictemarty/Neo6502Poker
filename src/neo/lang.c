@@ -32,8 +32,8 @@ const char *hand_label(hand_cat_t cat) { return HANDS[lang][cat]; }
 
 /* ---- pages d'aide (53 colonnes max, ASCII) ---------------------------------- */
 static const char *const HELP_TITLES[2][HELP_PAGES] = {
-    { "COMMENT JOUER", "L'ECART", "QUITTE OU DOUBLE", "LES GAINS" },
-    { "HOW TO PLAY", "THE DRAW", "DOUBLE OR NOTHING", "THE PAYOUTS" },
+    { "COMMENT JOUER", "L'ECART", "QUITTE OU DOUBLE", "LES GAINS", "CREDITS" },
+    { "HOW TO PLAY", "THE DRAW", "DOUBLE OR NOTHING", "THE PAYOUTS", "CREDITS" },
 };
 
 static const char *const HELP_FR_1[] = {
@@ -109,9 +109,38 @@ static const char *const HELP_EN_4[] = {
     "ROYAL FLUSH     10 J Q K A in one suit         x500",
     NULL };
 
+static const char *const HELP_FR_5[] = {
+    "JEU        Programmation Benedicte MARTY, 2026,",
+    "           avec l'aide de Claude Code (Anthropic).",
+    "           D'apres le video-poker d'ASN Diffusion",
+    "           pour Oric 1 (1983). Licence EUPL-1.2.",
+    "MACHINE    Neo6502 : carte Olimex (W65C02S + RP2040),",
+    "           firmware et API de Paul Robson et",
+    "           contributeurs (licence MIT).",
+    "OUTILS     Compilateur llvm-mos (Apache-2.0),",
+    "           emulateur Phosphoneo pour les tests.",
+    "CARTES     Dessins de Dmitry Fomin (CC0),",
+    "           Wikimedia Commons.",
+    "SONS       Effets sonores du firmware Neo6502.",
+    NULL };
+static const char *const HELP_EN_5[] = {
+    "GAME       Programming Benedicte MARTY, 2026,",
+    "           with the help of Claude Code (Anthropic).",
+    "           After the ASN Diffusion video poker",
+    "           for the Oric 1 (1983). EUPL-1.2 licence.",
+    "MACHINE    Neo6502: Olimex board (W65C02S + RP2040),",
+    "           firmware and API by Paul Robson and",
+    "           contributors (MIT licence).",
+    "TOOLS      llvm-mos compiler (Apache-2.0),",
+    "           Phosphoneo emulator for the tests.",
+    "CARDS      Artwork by Dmitry Fomin (CC0),",
+    "           Wikimedia Commons.",
+    "SOUNDS     Sound effects from the Neo6502 firmware.",
+    NULL };
+
 static const char *const *const HELP[2][HELP_PAGES] = {
-    { HELP_FR_1, HELP_FR_2, HELP_FR_3, HELP_FR_4 },
-    { HELP_EN_1, HELP_EN_2, HELP_EN_3, HELP_EN_4 },
+    { HELP_FR_1, HELP_FR_2, HELP_FR_3, HELP_FR_4, HELP_FR_5 },
+    { HELP_EN_1, HELP_EN_2, HELP_EN_3, HELP_EN_4, HELP_EN_5 },
 };
 
 const char *help_title(uint8_t page) { return HELP_TITLES[lang][page]; }
