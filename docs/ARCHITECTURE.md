@@ -38,6 +38,12 @@ des captures de référence (le jeu est déterministe dans l'émulateur).
 Déploiement : copier `build/poker.neo` et `assets/cards/56x80/cards.bin` à la racine de la SD,
 puis `load "poker.neo"` / `run` (ou via l'émulateur).
 
+## Retournement des cartes
+`display_flip_many` : pour chaque étape k ∈ {2, 4, 8}, la carte est blittée avec un `stride` de
+k lignes et une hauteur 80/k (compression verticale gratuite), 20 ms par image ; les nouvelles
+faces sont chargées entre la fermeture et l'ouverture. Toutes les cartes qui changent sont
+animées dans la même passe.
+
 ## Écarts assumés par rapport au Poker ASN
 - La paire d'As paie (bug corrigé) ; 9-10-V-D-R assortis = quinte flush (bug corrigé).
 - Mise plafonnée à 10 ; « quitte ou double » non encore implémenté (US-05).

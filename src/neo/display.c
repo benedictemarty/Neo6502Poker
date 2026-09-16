@@ -16,7 +16,6 @@ struct blitter_area {
 } __attribute__((packed));
 
 static uint8_t slots[CARD_SLOTS][CARD_BYTES];
-static uint8_t frame[CARD_BYTES];
 static struct blitter_area area;
 
 static void api_call(uint8_t group, uint8_t function) {
@@ -41,16 +40,16 @@ uint8_t display_load_card(uint8_t slot, uint8_t card) {
     return n == CARD_BYTES;
 }
 
-static void blit(const uint8_t *data, int16_t x, int16_t y, uint8_t w) {
+static void blit_rows(const uint8_t *data, int16_t x, int16_t y, uint8_t row_step, uint8_t h) {
     area.address = (uint16_t)(uintptr_t)data;
     area.page = 0;
     area.padding = 0;
-    area.stride = w / 2;
+    area.stride = (int16_t)(CARD_W / 2) * row_step;
     area.format = 1;
     area.transparent = 0;
     area.solid = 0;
-    area.height = CARD_H;
-    area.width = w;
+    area.height = h;
+    area.width = CARD_W;
     uint16_t a = (uint16_t)(uintptr_t)&area;
     ControlPort.params[0] = 0;                  /* action : copie */
     ControlPort.params[1] = a & 0xFF;
@@ -64,39 +63,30 @@ static void blit(const uint8_t *data, int16_t x, int16_t y, uint8_t w) {
 }
 
 void display_blit_slot(uint8_t slot, int16_t x, int16_t y) {
-    blit(slots[slot], x, y, CARD_W);
+    blit_rows(slots[slot], x, y, 1, CARD_H);
 }
 
-/* Compresse horizontalement l'image du slot à la largeur w (paire) dans `frame`. */
-static void squeeze(uint8_t slot, uint8_t w) {
-    const uint8_t *src = slots[slot];
-    uint8_t *dst = frame;
-    for (uint8_t y = 0; y < CARD_H; y++) {
-        for (uint8_t ox = 0; ox < w; ox += 2) {
-            uint8_t sx0 = (uint8_t)(((uint16_t)ox * CARD_W) / w);
-            uint8_t sx1 = (uint8_t)(((uint16_t)(ox + 1) * CARD_W) / w);
-            uint8_t b0 = src[sx0 >> 1], b1 = src[sx1 >> 1];
-            uint8_t p0 = (sx0 & 1) ? (b0 & 0x0F) : (b0 >> 4);
-            uint8_t p1 = (sx1 & 1) ? (b1 & 0x0F) : (b1 >> 4);
-            *dst++ = (uint8_t)((p0 << 4) | p1);
-        }
-        src += CARD_W / 2;
-    }
-}
-
-static const uint8_t flip_widths[] = { 44, 32, 20, 8 };
-
-static void flip_frame(uint8_t slot, uint8_t w, int16_t x, int16_t y) {
-    squeeze(slot, w);
+/* Retournement autour de l'axe horizontal : la carte est blittée avec un pas de `k` lignes
+ * (stride = k * 28 octets, hauteur 80/k), ce qui la compresse verticalement sans calcul CPU. */
+static void flip_frame(uint8_t slot, uint8_t k, int16_t x, int16_t y) {
+    uint8_t h = CARD_H / k;
     display_clear_rect(x, y, x + CARD_W - 1, y + CARD_H - 1, COL_TABLE);
-    blit(frame, x + (CARD_W - w) / 2, y, w);
-    display_wait_ticks(2);
+    blit_rows(slots[slot], x, y + (CARD_H - h) / 2, k, h);
 }
 
-void display_flip(uint8_t from, uint8_t to, int16_t x, int16_t y) {
-    for (uint8_t i = 0; i < sizeof flip_widths; i++) flip_frame(from, flip_widths[i], x, y);
-    for (uint8_t i = sizeof flip_widths; i-- > 0;) flip_frame(to, flip_widths[i], x, y);
-    display_blit_slot(to, x, y);
+static const uint8_t flip_steps[] = { 2, 4, 8 };   /* 40, 20, 10 lignes */
+
+void display_flip_many(uint8_t n, const uint8_t *slot, const uint8_t *card, const int16_t *x, int16_t y) {
+    for (uint8_t f = 0; f < sizeof flip_steps; f++) {                /* fermeture des anciennes faces */
+        for (uint8_t i = 0; i < n; i++) flip_frame(slot[i], flip_steps[f], x[i], y);
+        display_wait_ticks(2);
+    }
+    for (uint8_t i = 0; i < n; i++) display_load_card(slot[i], card[i]);
+    for (uint8_t f = sizeof flip_steps; f-- > 0;) {                   /* ouverture des nouvelles */
+        for (uint8_t i = 0; i < n; i++) flip_frame(slot[i], flip_steps[f], x[i], y);
+        display_wait_ticks(2);
+    }
+    for (uint8_t i = 0; i < n; i++) display_blit_slot(slot[i], x[i], y);
 }
 
 void display_text(uint16_t x, uint16_t y, uint8_t colour, const char *s) {

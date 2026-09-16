@@ -8,8 +8,7 @@
 #define CARD_H 80
 #define CARD_BYTES (CARD_W * CARD_H / 2)   /* 4 bpp */
 #define SLOT_BACK 5                        /* dos, chargé une fois */
-#define SLOT_TEMP 6                        /* image cible pendant un retournement */
-#define CARD_SLOTS 7
+#define CARD_SLOTS 6
 #define CARDS_FILE "cards.bin"             /* assets/cards/56x80/cards.bin copié sur la SD */
 
 /* Palette Neo6502. */
@@ -24,8 +23,9 @@
 void display_init(void);
 uint8_t display_load_card(uint8_t slot, uint8_t card);   /* card 0..51 ou CARD_BACK */
 void display_blit_slot(uint8_t slot, int16_t x, int16_t y);
-/* Retournement : l'image du slot `from` se referme, celle du slot `to` s'ouvre. */
-void display_flip(uint8_t from, uint8_t to, int16_t x, int16_t y);
+/* Retournement simultané de n cartes : les images des slots se referment, les cartes `card`
+ * sont chargées dans ces slots puis s'ouvrent. */
+void display_flip_many(uint8_t n, const uint8_t *slot, const uint8_t *card, const int16_t *x, int16_t y);
 void display_text(uint16_t x, uint16_t y, uint8_t colour, const char *s);
 void display_big_text(uint16_t x, uint16_t y, uint8_t colour, uint8_t size, const char *s);
 void display_clear_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t colour);

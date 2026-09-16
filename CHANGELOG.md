@@ -2,6 +2,12 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.5.1] - 2026-09-16
+### Modifié
+- Retournement des cartes 6× plus court (721 ms → ~120 ms pour une donne) : animation autour
+  de l'axe horizontal réalisée par le pas de lignes du blitter (80 → 40 → 20 → 10 lignes, puis
+  ouverture), sans calcul sur le 6502, et toutes les cartes qui changent sont retournées ensemble.
+
 ## [0.5.0] - 2026-09-16
 ### Ajouté
 - Écran de présentation (titre, éventail de cartes, crédits « Basé sur le vidéo-poker de la société

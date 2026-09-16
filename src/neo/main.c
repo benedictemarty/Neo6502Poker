@@ -92,19 +92,19 @@ static void draw_label(uint8_t i) {
     }
 }
 
-/* Affiche la main : les positions dont l'image change sont retournées. */
+/* Affiche la main : les positions dont l'image change sont retournées ensemble. */
 static void show_hand(void) {
+    uint8_t n = 0, slot[HAND_SIZE], card[HAND_SIZE];
+    int16_t x[HAND_SIZE];
     for (uint8_t i = 0; i < HAND_SIZE; i++) {
         if (shown[i] != game.hand[i]) {
-            uint8_t from = (shown[i] == CARD_BACK) ? SLOT_BACK : i;
-            uint8_t to = (game.hand[i] == CARD_BACK) ? SLOT_BACK : SLOT_TEMP;
-            if (to == SLOT_TEMP) display_load_card(SLOT_TEMP, game.hand[i]);
-            display_flip(from, to, card_x(i), HAND_Y);
-            if (to == SLOT_TEMP) display_load_card(i, game.hand[i]);
+            if (shown[i] == CARD_BACK) display_load_card(i, CARD_BACK);   /* face actuelle = dos */
+            slot[n] = i; card[n] = game.hand[i]; x[n] = card_x(i); n++;
             shown[i] = game.hand[i];
         }
-        draw_label(i);
     }
+    if (n) display_flip_many(n, slot, card, x, HAND_Y);
+    for (uint8_t i = 0; i < HAND_SIZE; i++) draw_label(i);
 }
 
 int main(void) {
