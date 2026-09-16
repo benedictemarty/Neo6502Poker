@@ -12,7 +12,7 @@ Sorties (assets/cards/<W>x<H>/) :
                                  (W/16)*(H/16) blocs 16x16 ligne par ligne ; blocs 0-127 en tiles
                                  (id $00-$7F), suivants en sprites 16x16 (id $80 + index-128)
 
-Usage : python3 tools/make_cards.py [--size 32x48] [--size 48x64] [--density 48]
+Usage : python3 tools/make_cards.py [--size 56x80] [--size 48x64] [--density 96]
 Dépendances : ImageMagick (`convert`) pour rasteriser le SVG, Pillow.
 """
 import os
@@ -79,7 +79,26 @@ def nearest(rgb):
     return sel
 
 
-def quantize(im):
+# Les SVG source n'utilisent que 5 couleurs à plat ; les autres valeurs sont de
+# l'anticrénelage. On classe chaque pixel vers la couleur de base la plus proche
+# (le noir est favorisé pour préserver les traits fins), puis vers la palette Neo.
+FLAT = [((255, 255, 255), 7), ((0, 0, 0), 8), ((255, 85, 85), 1),
+        ((85, 85, 170), 13), ((255, 255, 85), 3), ((159, 159, 207), 15)]   # 13 lavande, 15 gris = liseré
+BLACK_BIAS = 0.6   # < 1 : un pixel gris devient noir plus tôt
+
+
+def classify(rgb):
+    best, sel = None, 7
+    for base, idx in FLAT:
+        s = sum((a - b) ** 2 for a, b in zip(rgb, base))
+        if idx == 8:
+            s *= BLACK_BIAS
+        if best is None or s < best:
+            best, sel = s, idx
+    return sel
+
+
+def quantize(im, mapper=classify):
     """Image RGB -> image 'P' d'indices Neo6502."""
     out = Image.new("P", im.size)
     flat = [0] * 768
@@ -90,8 +109,57 @@ def quantize(im):
     dst = out.load()
     for y in range(im.size[1]):
         for x in range(im.size[0]):
-            dst[x, y] = nearest(src[x, y])
+            dst[x, y] = mapper(src[x, y])
     return out
+
+
+# Police pixel 5x7 pour les index de coin (les glyphes du SVG sont illisibles une fois réduits).
+FONT = {
+    "A": ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+    "2": ["01110", "10001", "00001", "00110", "01000", "10000", "11111"],
+    "3": ["11110", "00001", "00001", "01110", "00001", "00001", "11110"],
+    "4": ["00010", "00110", "01010", "10010", "11111", "00010", "00010"],
+    "5": ["11111", "10000", "11110", "00001", "00001", "10001", "01110"],
+    "6": ["01110", "10000", "10000", "11110", "10001", "10001", "01110"],
+    "7": ["11111", "00001", "00010", "00100", "01000", "01000", "01000"],
+    "8": ["01110", "10001", "10001", "01110", "10001", "10001", "01110"],
+    "9": ["01110", "10001", "10001", "01111", "00001", "00001", "01110"],
+    "J": ["00111", "00010", "00010", "00010", "00010", "10010", "01100"],
+    "Q": ["01110", "10001", "10001", "10001", "10101", "10010", "01101"],
+    "K": ["10001", "10010", "10100", "11000", "10100", "10010", "10001"],
+    "1": ["010", "110", "010", "010", "010", "010", "111"],
+    "0": ["010", "101", "101", "101", "101", "101", "010"],
+}
+INDEX_BOX = (0, 0, 11, 13)   # zone du rang en haut à gauche (56x80), le symbole reste en dessous
+
+
+def draw_index(imgP, rank, colour):
+    """Rang net dans les deux coins (bas droit tourné de 180°) ; seulement en 56x80."""
+    w, h = imgP.size
+    if (w, h) != (56, 80):
+        return
+    px = imgP.load()
+    glyphs = ["1", "0"] if rank == "T" else [rank]
+    for gx in range(INDEX_BOX[0], INDEX_BOX[2]):
+        for gy in range(INDEX_BOX[1], INDEX_BOX[3]):
+            px[gx, gy] = 7
+            px[w - 1 - gx, h - 1 - gy] = 7
+    x = 2
+    for g in glyphs:
+        rows = FONT[g]
+        for gy, row in enumerate(rows):
+            for gx, bit in enumerate(row):
+                if bit == "1":
+                    px[x + gx, 3 + gy] = colour
+                    px[w - 1 - (x + gx), h - 1 - (3 + gy)] = colour
+        x += len(rows[0]) + 1
+    # coins arrondis : on efface les résidus gris du liseré
+    for cx, cy in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)):
+        for dx in range(3):
+            for dy in range(3):
+                gx, gy = abs(cx - dx), abs(cy - dy)
+                if px[gx, gy] == 15:
+                    px[gx, gy] = 7
 
 
 def make_back(w, h, density):
@@ -152,10 +220,11 @@ def build(size, density):
         for ri, (x0, x1) in enumerate(cols):
             card = deck.crop((x0, y0, x1 + 1, y1 + 1)).resize((w, h), Image.LANCZOS)
             q = quantize(card)
+            draw_index(q, RANKS[ri], 1 if si in (1, 2) else 8)
             name = f"{RANKS[ri]}{SUITS[si]}"
             q.save(os.path.join(outdir, "png", name + ".png"))
             cards.append((name, q))
-    back = quantize(make_back(w, h, density))
+    back = quantize(make_back(w, h, density), nearest)
     back.save(os.path.join(outdir, "png", "back.png"))
     cards.append(("back", back))
 
@@ -170,19 +239,22 @@ def build(size, density):
         for _, q in cards:
             f.write(pack4bpp(q))
 
-    # un .gfx par couleur (13 cartes + dos)
+    # un .gfx par couleur (13 cartes + dos) — seulement si la taille est en tiles 16x16
+    tiles = []
     for si, s in enumerate(SUITS):
+        if w % 16 or h % 16:
+            break
         tiles = []
         for _, q in cards[si * 13:si * 13 + 13] + [cards[52]]:
             tiles += tiles16(q)
         write_gfx(os.path.join(outdir, f"cards_{s}.gfx"), tiles)
-    print(f"{w}x{h} : 53 images, {w * h // 2} octets/carte, {len(tiles)} blocs 16x16 par .gfx "
-          f"({min(len(tiles), MAX_TILES)} tiles + {max(0, len(tiles) - MAX_TILES)} sprites, "
-          f"{len(tiles) * 128 + 256} octets)")
+    print(f"{w}x{h} : 53 images, {w * h // 2} octets/carte"
+          + (f", {len(tiles)} blocs 16x16 par .gfx ({min(len(tiles), MAX_TILES)} tiles + "
+             f"{max(0, len(tiles) - MAX_TILES)} sprites, {len(tiles) * 128 + 256} octets)" if tiles else ""))
 
 
 def main(argv):
-    sizes, density = [], 48
+    sizes, density = [], 96
     i = 1
     while i < len(argv):
         if argv[i] == "--size":
@@ -194,7 +266,7 @@ def main(argv):
         else:
             print(__doc__)
             return 1
-    for size in sizes or [(32, 48), (48, 64)]:
+    for size in sizes or [(32, 48), (48, 64), (56, 80)]:
         build(size, density)
     return 0
 

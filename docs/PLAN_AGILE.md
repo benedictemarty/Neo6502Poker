@@ -18,7 +18,8 @@ Un poker 32 cartes joueur-contre-machine sur Neo6502, fidèle à l'esprit des Po
 |---|---|---|---|
 | 0 | 2026-09-16 | Récupération + analyse du Poker Oric, outillage TAP/BASIC, dépôt git | terminé |
 | 1 | 2026-09-16 | US-03, US-04, US-04b (vidéo-poker jouable en C) | terminé — validé sur Phosphoneo |
-| 2 | à planifier | quitte ou double, sons, dos/retournement, IA du poker 2 joueurs (US-05) | à faire |
+| 2 | 2026-09-16 | écran-titre, FR/EN, retournement animé, qualité des cartes (56×80, index pixel) | terminé |
+| 3 | à planifier | quitte ou double, sons, IA du poker 2 joueurs (US-05) | à faire |
 
 ## Définition de « fini »
 Code testé (pytest ou tests d'émulation), CHANGELOG et documentation à jour, commit signé bmarty.

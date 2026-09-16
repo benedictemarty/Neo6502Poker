@@ -43,10 +43,17 @@ Sorties dans `assets/cards/<W>x<H>/` :
 | `cards.bin` | 53 images 4 bpp ; index = `couleur*13 + rang` (♠=0 ♥=1 ♦=2 ♣=3, A=0 … K=12), dos = 52 |
 | `cards_<s|h|d|c>.gfx` | 14 cartes en blocs 16×16, ligne par ligne ; carte n → blocs `n*T … n*T+T-1` (T = 6 en 32×48, 12 en 48×64), dos = carte 13. `Draw Image` n'adresse que 128 tiles (`$00-$7F`) : les blocs ≥ 128 (48×64 seulement) sont stockés en sprites 16×16, id = `$80 + (bloc − 128)` |
 
+## 3b. Qualité (v0.5.0)
+- Le SVG n'utilise que 5 couleurs à plat (blanc, noir, rouge, bleu, jaune) : chaque pixel réduit est
+  classé vers la plus proche (noir favorisé ×0,6 pour garder les traits), puis vers la palette Neo :
+  blanc 7, noir 8, rouge 1, bleu → lavande 13, jaune 3, liseré gris 15.
+- Index de coin redessinés (police pixel 5×7, `FONT` dans `make_cards.py`) dans les deux coins.
+- Format **56×80** utilisé par le jeu (blitter, pas de contrainte de tiles) : 2 240 octets/carte,
+  `cards.bin` = 118 720 octets, chargé carte par carte depuis la SD.
+
 ## 4. Choix recommandé
 
-**48×64** : les figures et les index de coin restent lisibles ; 5 cartes = 240 px de large
-(sur 320). Le 32×48 est fourni pour une main adverse ou un affichage réduit.
+**56×80** pour le jeu (blitter). 48×64 et 32×48 restent générés pour un usage en tiles/sprites (`.gfx`).
 
 ## 5. Limites connues
 

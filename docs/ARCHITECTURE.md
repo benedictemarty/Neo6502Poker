@@ -7,18 +7,19 @@ src/engine/   moteur pur C, sans dépendance matérielle — compilé en natif (
   hand.[ch]         évaluateur 5 cartes + table de gains ASN (paire habillée V/D/R/A … flush royale)
   videopoker.[ch]   machine à états : BETTING → HOLDING → SHOWDOWN → (BETTING | OVER)
 src/neo/      couche Neo6502 (API via neo/api.h et ControlPort)
-  display.[ch]      chargement d'une carte depuis cards.bin (SD) et affichage par le blitter
-  main.c            boucle de jeu, clavier, dessin de la table
+  display.[ch]      chargement d'une carte depuis cards.bin (SD), blitter, retournement animé
+  lang.[ch]         textes français / anglais
+  main.c            écran-titre, boucle de jeu, clavier, dessin de la table
 tests/c/      tests natifs (exécutés par `make test-engine`, et via pytest `tests/test_engine_c.py`)
 ```
 
 ## Identifiants de cartes
 `id = couleur*13 + rang`, couleur 0=♠ 1=♥ 2=♦ 3=♣, rang 0=A, 1=2 … 9=10, 10=V, 11=D, 12=R.
-C'est aussi l'index de l'image dans `assets/cards/48x64/cards.bin` (dos = 52).
+C'est aussi l'index de l'image dans `assets/cards/56x80/cards.bin` (dos = 52).
 
 ## Affichage des cartes
 Une main mélange les couleurs, donc les `.gfx` par couleur ne suffisent pas. Le programme
-lit l'image de chaque carte (1 536 octets, 4 bpp) dans `cards.bin` via `neo_file_open/seek/read`
+lit l'image de chaque carte (2 240 octets, 4 bpp, 56×80) dans `cards.bin` via `neo_file_open/seek/read`
 et l'affiche avec **Blit Image** (API groupe 12, fonction 4, format source 1 = quartets,
 page 0 = RAM 6502). Le SDK llvm-mos ne wrappe pas encore le blitter : `display.c` écrit
 directement dans `ControlPort` (`$FF00`).
@@ -34,7 +35,7 @@ stockage = `build/storage/`), `make shot` fait une capture headless avec Phospho
 sans affichage) ; `tests/test_emulator.py` compare
 des captures de référence (le jeu est déterministe dans l'émulateur).
 
-Déploiement : copier `build/poker.neo` et `assets/cards/48x64/cards.bin` à la racine de la SD,
+Déploiement : copier `build/poker.neo` et `assets/cards/56x80/cards.bin` à la racine de la SD,
 puis `load "poker.neo"` / `run` (ou via l'émulateur).
 
 ## Écarts assumés par rapport au Poker ASN

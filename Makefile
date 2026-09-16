@@ -5,7 +5,7 @@ HOST_CC  ?= gcc
 BUILD    := build
 
 ENGINE_SRC := src/engine/cards.c src/engine/hand.c src/engine/videopoker.c
-NEO_SRC    := src/neo/main.c src/neo/display.c
+NEO_SRC    := src/neo/main.c src/neo/display.c src/neo/lang.c
 
 .PHONY: all neo test-engine test clean run run-emu shot
 
@@ -46,11 +46,11 @@ EMU     ?= $(HOME)/Phosphoneo/build/phosphoneo
 SD      := $(BUILD)/sd
 
 run: $(BUILD)/poker.neo
-	@mkdir -p $(BUILD)/storage && cp assets/cards/48x64/cards.bin $(BUILD)/storage/
+	@mkdir -p $(BUILD)/storage && cp assets/cards/56x80/cards.bin $(BUILD)/storage/
 	cd $(BUILD) && $(NEO_EMU) poker.neo
 
 run-emu: run
 
 shot: $(BUILD)/poker.neo
-	@mkdir -p $(SD) && cp assets/cards/48x64/cards.bin $(SD)/
+	@mkdir -p $(SD) && cp assets/cards/56x80/cards.bin $(SD)/
 	$(EMU) $(BUILD)/poker.neo --headless --storage $(SD) --cycles 60000000 --type-keys '6000000:MMD' --screenshot $(BUILD)/shot.ppm

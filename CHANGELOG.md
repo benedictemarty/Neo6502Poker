@@ -2,6 +2,20 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.5.0] - 2026-09-16
+### Ajouté
+- Écran de présentation (titre, éventail de cartes, crédits « Basé sur le vidéo-poker de la société
+  ASN (Oric 1) — Programmation Bénédicte MARTY avec l'aide de Claude Code », choix de langue).
+- Version **française et anglaise** (`src/neo/lang.[ch]`, touche F/E à l'écran-titre).
+- Animation de retournement des cartes dans les deux sens (dos → face à la donne et à l'écart,
+  face → dos à la manche suivante) : compression horizontale en RAM puis blitter, 8 images.
+- Cartes **56×80** (le blitter n'impose pas des multiples de 16) ; 5 cartes = 312 px.
+### Modifié
+- Qualité des cartes : classification vers les 5 couleurs à plat du SVG (fini les pixels pêche/gris),
+  bleu des figures en lavande, liseré gris, **index de coin redessinés en police pixel 5×7** (les
+  glyphes du SVG étaient illisibles), coins nettoyés ; rasterisation à 96 dpi.
+- Captures golden : titre, donne, abattage FR et EN.
+
 ## [0.4.2] - 2026-09-16
 ### Ajouté
 - `make run` : lance le jeu dans l'émulateur officiel `neo` (SDL2) ; Phosphoneo reste l'outil headless (`make shot`, tests).
