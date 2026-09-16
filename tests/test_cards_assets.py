@@ -17,9 +17,11 @@ def _check_size(w, h):
     for s in "shdc":
         data = open(os.path.join(d, f"cards_{s}.gfx"), "rb").read()
         assert data[0] == 1
-        assert data[1] == 14 * tiles_per_card  # tiles 16x16
-        assert data[2] == 0 and data[3] == 0   # pas de sprites
-        assert len(data) == 256 + data[1] * 128
+        n = 14 * tiles_per_card
+        assert data[1] == min(n, 128)          # tiles 16x16 ($00-$7F)
+        assert data[2] == max(0, n - 128)      # suite en sprites 16x16 ($80+)
+        assert data[2] <= 64 and data[3] == 0
+        assert len(data) == 256 + n * 128
         assert len(data) < 32768 - 256
 
 

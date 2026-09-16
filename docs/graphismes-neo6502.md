@@ -41,7 +41,7 @@ Sorties dans `assets/cards/<W>x<H>/` :
 | `png/<rang><couleur>.png` | 52 cartes (`A 2 … 9 T J Q K` × `s h d c`) + `back.png`, images indexées |
 | `deck.png` | planche de contrôle |
 | `cards.bin` | 53 images 4 bpp ; index = `couleur*13 + rang` (♠=0 ♥=1 ♦=2 ♣=3, A=0 … K=12), dos = 52 |
-| `cards_<s|h|d|c>.gfx` | 14 cartes en tiles 16×16, ligne par ligne ; carte n → tiles `n*T … n*T+T-1` (T = 6 en 32×48, 12 en 48×64), dos = carte 13 |
+| `cards_<s|h|d|c>.gfx` | 14 cartes en blocs 16×16, ligne par ligne ; carte n → blocs `n*T … n*T+T-1` (T = 6 en 32×48, 12 en 48×64), dos = carte 13. `Draw Image` n'adresse que 128 tiles (`$00-$7F`) : les blocs ≥ 128 (48×64 seulement) sont stockés en sprites 16×16, id = `$80 + (bloc − 128)` |
 
 ## 4. Choix recommandé
 

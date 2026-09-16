@@ -2,6 +2,11 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.3.1] - 2026-09-16
+### Corrigé
+- `.gfx` 48×64 : `Draw Image` n'adresse que 128 tiles ; les blocs 128-167 sont désormais
+  stockés en sprites 16×16 (`$80+`) pour rester affichables. Tests et doc mis à jour.
+
 ## [0.3.0] - 2026-09-16
 ### Ajouté
 - Faces et dos de cartes open source (CC0, Dmitry Fomin) dans `assets/source/`.

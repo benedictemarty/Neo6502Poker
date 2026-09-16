@@ -8,8 +8,9 @@ Sorties (assets/cards/<W>x<H>/) :
   - deck.png                     planche de contrôle (52 cartes + dos)
   - cards.bin                    53 images 4 bpp (2 pixels/octet, quartet haut = 1er pixel),
                                  ordre : ♠A..K, ♥A..K, ♦A..K, ♣A..K, dos (index 52)
-  - cards_<s|h|d|c>.gfx          fichier graphique Neo6502 (tiles 16x16) : 13 cartes + dos,
-                                 chaque carte = (W/16)*(H/16) tiles en ordre ligne par ligne
+  - cards_<s|h|d|c>.gfx          fichier graphique Neo6502 : 13 cartes + dos, chaque carte =
+                                 (W/16)*(H/16) blocs 16x16 ligne par ligne ; blocs 0-127 en tiles
+                                 (id $00-$7F), suivants en sprites 16x16 (id $80 + index-128)
 
 Usage : python3 tools/make_cards.py [--size 32x48] [--size 48x64] [--density 48]
 Dépendances : ImageMagick (`convert`) pour rasteriser le SVG, Pillow.
@@ -121,13 +122,19 @@ def tiles16(imgP):
             for y in range(0, h, 16) for x in range(0, w, 16)]
 
 
+MAX_TILES = 128  # Draw Image adresse les tiles $00-$7F, puis les sprites 16x16 $80-$BF
+
+
 def write_gfx(path, tiles):
     """Format .gfx Neo6502 (cf. basic/scripts/gconvert.py) : en-tête 256 octets
-    [0]=1 (format), [1]=nb tiles 16x16, [2]=nb sprites 16x16, [3]=nb sprites 32x32."""
-    assert len(tiles) <= 255
+    [0]=1 (format), [1]=nb tiles 16x16, [2]=nb sprites 16x16, [3]=nb sprites 32x32.
+    Au-delà de 128 tiles, les blocs suivants sont stockés comme sprites 16x16 (même
+    format de données) afin de rester adressables : id = $80 + (index - 128)."""
+    assert len(tiles) <= MAX_TILES + 64
     header = bytearray(256)
     header[0] = 1
-    header[1] = len(tiles)
+    header[1] = min(len(tiles), MAX_TILES)
+    header[2] = max(0, len(tiles) - MAX_TILES)
     data = header + b"".join(tiles)
     assert len(data) < 32768 - 256, "Trop d'images pour la mémoire graphique (32 Ko)"
     open(path, "wb").write(data)
@@ -169,8 +176,9 @@ def build(size, density):
         for _, q in cards[si * 13:si * 13 + 13] + [cards[52]]:
             tiles += tiles16(q)
         write_gfx(os.path.join(outdir, f"cards_{s}.gfx"), tiles)
-    print(f"{w}x{h} : 53 images, {w * h // 2} octets/carte, "
-          f"{len(tiles)} tiles par .gfx ({len(tiles) * 128 + 256} octets)")
+    print(f"{w}x{h} : 53 images, {w * h // 2} octets/carte, {len(tiles)} blocs 16x16 par .gfx "
+          f"({min(len(tiles), MAX_TILES)} tiles + {max(0, len(tiles) - MAX_TILES)} sprites, "
+          f"{len(tiles) * 128 + 256} octets)")
 
 
 def main(argv):
