@@ -2,6 +2,16 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.4.0] - 2026-09-16
+### Ajouté
+- Chaîne C (llvm-mos, cible neo6502) : `Makefile`, `src/engine/` (cartes, évaluateur, vidéo-poker),
+  `src/neo/` (affichage par blitter depuis `cards.bin`, boucle de jeu), `build/poker.neo`.
+- Tests natifs : énumération exhaustive des 2 598 960 mains (comptes de référence), cas des deux
+  bugs ASN corrigés, machine à états ; intégrés à pytest.
+- `docs/ARCHITECTURE.md`.
+### Non vérifié
+- Exécution sur émulateur/matériel Neo6502 (aucun émulateur installé sur ce poste).
+
 ## [0.3.1] - 2026-09-16
 ### Corrigé
 - `.gfx` 48×64 : `Draw Image` n'adresse que 128 tiles ; les blocs 128-167 sont désormais

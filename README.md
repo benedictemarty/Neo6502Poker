@@ -3,11 +3,21 @@
 Portage / réécriture d'un jeu de poker (32 cartes, joueur contre machine) pour le **Neo6502**,
 inspiré des « Poker » édités pour l'Oric au début des années 80.
 
+## Compilation et tests
+
+```
+make neo           # binaire Neo6502 (llvm-mos dans ~/llvm-mos)
+make test          # tests natifs C + pytest
+```
+Voir `docs/ARCHITECTURE.md`.
+
 ## Contenu
 
 - `docs/analyse-poker-asn.md` — analyse du Poker **ASN Diffusion** (vidéo-poker 52 cartes, 1983).
 - `docs/analyse-poker-oric.md` — analyse du Poker Oric de V. Talvas (Loriciels) : règles,
   évaluateur de mains, IA, graphismes, bugs.
+- `src/engine/`, `src/neo/` — moteur C et couche Neo6502 ; `tests/c/` — tests natifs.
+- `docs/ARCHITECTURE.md` — organisation du code C.
 - `docs/graphismes-neo6502.md` — contraintes graphiques du Neo6502 et génération des cartes.
 - `docs/PLAN_AGILE.md` — backlog et sprints.
 - `reference/poker-oric/` — TAP d'origine et listings BASIC détokenisés.
