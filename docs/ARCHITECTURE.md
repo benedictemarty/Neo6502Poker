@@ -5,7 +5,7 @@ src/engine/   moteur pur C, sans dépendance matérielle — compilé en natif (
               et en 6502 (llvm-mos) pour la cible
   cards.[ch]        paquet 52 cartes, RNG xorshift injectable, mélange Fisher-Yates
   hand.[ch]         évaluateur 5 cartes + table de gains ASN (paire habillée V/D/R/A … flush royale)
-  videopoker.[ch]   machine à états : BETTING → HOLDING → SHOWDOWN → (BETTING | OVER)
+  videopoker.[ch]   machine à états : BETTING → HOLDING → (WON ⇄ DOUBLE) → SHOWDOWN → (BETTING | OVER)
 src/neo/      couche Neo6502 (API via neo/api.h et ControlPort)
   display.[ch]      chargement d'une carte depuis cards.bin (SD), blitter, retournement animé
   lang.[ch]         textes français / anglais
@@ -46,4 +46,4 @@ animées dans la même passe.
 
 ## Écarts assumés par rapport au Poker ASN
 - La paire d'As paie (bug corrigé) ; 9-10-V-D-R assortis = quinte flush (bug corrigé).
-- Mise plafonnée à 10 ; « quitte ou double » non encore implémenté (US-05).
+- Mise plafonnée à 10 ; doublement plafonné à 30 000 (l'ASN doublait sans limite).

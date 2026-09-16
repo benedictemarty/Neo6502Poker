@@ -2,6 +2,20 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.6.0] - 2026-09-16
+### Ajouté
+- **Quitte ou double** (règle ASN) : après un gain, Q encaisse ou D propose de deviner la couleur
+  (R rouge / N noir, B en anglais) de la carte suivante ; gain doublé à chaque bonne réponse,
+  perdu sinon ; plafond de doublement 30 000. Nouveaux états `VP_WON`, `VP_DOUBLE`.
+- **Sons** (effets du firmware) : pièce à la mise et à l'encaissement, confirmation à la donne,
+  victoire / fanfare (carré et plus) / négatif à l'abattage, power-up ou défaite au pari, défaite
+  en fin de partie.
+- Captures golden `double_collect` et `double_lost` (graine différente via le moment de la frappe).
+### Corrigé
+- `card_is_red` : ♥ et ♦ sont rouges (♠/♥ auparavant) — détecté par le scénario émulé.
+- Q n'interrompt le jeu qu'en phase de mise ou en fin de partie (sinon Q = encaisser).
+- Capture golden `holding` reprise à l'état final (l'ancienne était prise pendant l'animation).
+
 ## [0.5.1] - 2026-09-16
 ### Modifié
 - Retournement des cartes 6× plus court (721 ms → ~120 ms pour une donne) : animation autour

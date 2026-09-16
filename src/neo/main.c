@@ -7,6 +7,9 @@
 #include "neo/display.h"
 #include "neo/lang.h"
 
+#define DOUBLE_POS 2                 /* position de la carte du quitte ou double */
+static void sfx(uint8_t id) { neo_sound_play_effect(0, id); }
+
 #define HAND_Y 96
 #define HAND_X0 4
 #define HAND_STEP 62
@@ -72,14 +75,32 @@ static void draw_status(void) {
     switch (game.state) {
     case VP_BETTING:  display_text(8, STATUS_Y + 16, COL_WHITE, T(S_HELP_BET)); break;
     case VP_HOLDING:  display_text(8, STATUS_Y + 16, COL_WHITE, T(S_HELP_HOLD)); break;
+    case VP_WON:
+        if (game.double_card != CARD_BACK)
+            snprintf(line, sizeof line, "%s   %s %u", T(S_DOUBLE_WIN), T(S_WIN), game.win);
+        else
+            snprintf(line, sizeof line, "%s   %s %u", hand_label(game.result), T(S_WIN), game.win);
+        display_text(8, STATUS_Y + 16, COL_YELLOW, line);
+        display_text(8, STATUS_Y + 28, COL_WHITE, T(S_WON));
+        break;
+    case VP_DOUBLE:
+        snprintf(line, sizeof line, "%s %u", T(S_WIN), game.win);
+        display_text(8, STATUS_Y + 16, COL_YELLOW, line);
+        display_text(8, STATUS_Y + 28, COL_WHITE, T(S_GUESS));
+        break;
     case VP_SHOWDOWN:
-        snprintf(line, sizeof line, "%s  +%u", hand_label(game.result), game.win);
-        display_text(8, STATUS_Y + 16, game.win ? COL_YELLOW : COL_LIGHT, line);
+        if (game.double_lost)
+            display_text(8, STATUS_Y + 16, COL_RED, T(S_DOUBLE_LOSE));
+        else {
+            snprintf(line, sizeof line, "%s  +%u", hand_label(game.result), game.win);
+            display_text(8, STATUS_Y + 16, game.win ? COL_YELLOW : COL_LIGHT, line);
+        }
         display_text(8, STATUS_Y + 28, COL_WHITE, T(S_NEXT));
         break;
     case VP_OVER:     display_text(8, STATUS_Y + 16, COL_RED, T(S_OVER)); break;
     }
-    display_text(316 - 6 * (uint16_t)strlen(T(S_QUIT)), STATUS_Y, COL_LIGHT, T(S_QUIT));
+    if (game.state == VP_BETTING || game.state == VP_OVER)
+        display_text(316 - 6 * (uint16_t)strlen(T(S_QUIT)), STATUS_Y, COL_LIGHT, T(S_QUIT));
 }
 
 static void draw_label(uint8_t i) {
@@ -92,19 +113,29 @@ static void draw_label(uint8_t i) {
     }
 }
 
-/* Affiche la main : les positions dont l'image change sont retournées ensemble. */
-static void show_hand(void) {
+/* Affiche les 5 positions : celles dont l'image change sont retournées ensemble. */
+static void show_cards(const card_t *target) {
     uint8_t n = 0, slot[HAND_SIZE], card[HAND_SIZE];
     int16_t x[HAND_SIZE];
     for (uint8_t i = 0; i < HAND_SIZE; i++) {
-        if (shown[i] != game.hand[i]) {
+        if (shown[i] != target[i]) {
             if (shown[i] == CARD_BACK) display_load_card(i, CARD_BACK);   /* face actuelle = dos */
-            slot[n] = i; card[n] = game.hand[i]; x[n] = card_x(i); n++;
-            shown[i] = game.hand[i];
+            slot[n] = i; card[n] = target[i]; x[n] = card_x(i); n++;
+            shown[i] = target[i];
         }
     }
     if (n) display_flip_many(n, slot, card, x, HAND_Y);
     for (uint8_t i = 0; i < HAND_SIZE; i++) draw_label(i);
+}
+
+static void show_hand(void) { show_cards(game.hand); }
+
+/* Vue du quitte ou double : dos partout, la carte tirée au centre. */
+static void show_double(void) {
+    card_t view[HAND_SIZE];
+    for (uint8_t i = 0; i < HAND_SIZE; i++) view[i] = CARD_BACK;
+    view[DOUBLE_POS] = game.double_card;
+    show_cards(view);
 }
 
 int main(void) {
@@ -117,20 +148,37 @@ int main(void) {
     draw_status();
     for (;;) {
         char k = read_key();
-        if (k == 'Q') break;
+        if (k == 'Q' && (game.state == VP_BETTING || game.state == VP_OVER)) break;   /* ailleurs Q = encaisser */
         switch (game.state) {
         case VP_BETTING:
-            if (k == 'M') vp_bet_inc(&game);
+            if (k == 'M') { if (vp_bet_inc(&game)) sfx(API_SFX_COIN); else sfx(API_SFX_REJECT); }
             else if (k == 'C') vp_bet_cancel(&game);
-            else if (k == 'D' && vp_deal(&game)) { draw_status(); show_hand(); }
+            else if (k == 'D' && vp_deal(&game)) { sfx(API_SFX_CONFIRM); draw_status(); show_hand(); }
             break;
         case VP_HOLDING:
-            if (k >= '1' && k <= '5') { vp_toggle_hold(&game, k - '1'); draw_label(k - '1'); }
-            else if (k == 'D') { vp_draw(&game); draw_status(); show_hand(); if (game.win) neo_sound_beep(); }
+            if (k >= '1' && k <= '5') { vp_toggle_hold(&game, k - '1'); draw_label(k - '1'); sfx(API_SFX_POSITIVE); }
+            else if (k == 'D') {
+                vp_draw(&game); draw_status(); show_hand();
+                if (game.result >= HAND_FOUR) sfx(API_SFX_FANFARE);
+                else if (game.win) sfx(API_SFX_VICTORY);
+                else sfx(API_SFX_NEGATIVE);
+            }
+            break;
+        case VP_WON:
+            if (k == 'Q') { vp_collect(&game); sfx(API_SFX_COIN); }
+            else if (k == 'D' && vp_double_start(&game)) { sfx(API_SFX_SWEEP); draw_status(); show_double(); }
+            break;
+        case VP_DOUBLE:
+            if (k == 'R' || k == 'N' || k == 'B') {
+                uint8_t won = vp_double_guess(&game, k == 'R');
+                draw_status(); show_double();
+                sfx(won ? API_SFX_POWERUP : API_SFX_DEFEAT);
+            }
             break;
         case VP_SHOWDOWN:
             if (k == ' ') {
                 vp_next_round(&game);
+                if (game.state == VP_OVER) sfx(API_SFX_DEFEAT);
                 for (uint8_t i = 0; i < HAND_SIZE; i++) game.hand[i] = CARD_BACK;   /* retour des dos */
                 show_hand();
             }

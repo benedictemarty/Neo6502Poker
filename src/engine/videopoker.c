@@ -4,7 +4,7 @@ void vp_init(videopoker_t *g, uint16_t seed) {
     rng_seed(&g->rng, seed);
     g->credit = VP_START_CREDIT;
     g->bet = 0; g->last_bet = 1;
-    g->result = HAND_NONE; g->win = 0;
+    g->result = HAND_NONE; g->win = 0; g->double_card = CARD_BACK; g->double_lost = 0;
     g->state = VP_BETTING;
     for (uint8_t i = 0; i < HAND_SIZE; i++) { g->hand[i] = CARD_BACK; g->held[i] = 0; }
 }
@@ -46,12 +46,38 @@ void vp_draw(videopoker_t *g) {
         if (!g->held[i]) g->hand[i] = deck_draw(&g->deck);
     g->result = hand_eval(g->hand);
     g->win = (uint16_t)hand_payout[g->result] * g->bet;
+    g->double_card = CARD_BACK; g->double_lost = 0;
+    g->state = g->win ? VP_WON : VP_SHOWDOWN;
+}
+
+void vp_collect(videopoker_t *g) {
+    if (g->state != VP_WON) return;
     g->credit += g->win;
     g->state = VP_SHOWDOWN;
 }
 
+uint8_t vp_double_start(videopoker_t *g) {
+    if (g->state != VP_WON || g->win > VP_MAX_WIN || g->deck.next >= DECK_SIZE) return 0;
+    g->double_card = CARD_BACK;
+    g->state = VP_DOUBLE;
+    return 1;
+}
+
+uint8_t vp_double_guess(videopoker_t *g, uint8_t red) {
+    if (g->state != VP_DOUBLE) return 0;
+    g->double_card = deck_draw(&g->deck);
+    if (card_is_red(g->double_card) == (red != 0)) {
+        g->win *= 2;
+        g->state = VP_WON;
+        return 1;
+    }
+    g->win = 0; g->double_lost = 1;
+    g->state = VP_SHOWDOWN;
+    return 0;
+}
+
 void vp_next_round(videopoker_t *g) {
     if (g->state != VP_SHOWDOWN) return;
-    g->bet = 0; g->win = 0;
+    g->bet = 0; g->win = 0; g->double_card = CARD_BACK; g->double_lost = 0;
     g->state = (g->credit == 0) ? VP_OVER : VP_BETTING;
 }

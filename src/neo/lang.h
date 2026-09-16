@@ -8,7 +8,7 @@ typedef enum { LANG_FR = 0, LANG_EN = 1 } lang_t;
 
 enum {
     S_SUBTITLE, S_CHOOSE, S_CREDIT, S_BET, S_HELP_BET, S_HELP_HOLD, S_NEXT, S_OVER,
-    S_HOLD, S_CHANGE, S_QUIT, S_COUNT
+    S_HOLD, S_CHANGE, S_QUIT, S_WON, S_GUESS, S_WIN, S_DOUBLE_WIN, S_DOUBLE_LOSE, S_COUNT
 };
 
 extern lang_t lang;

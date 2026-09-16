@@ -24,7 +24,7 @@ uint16_t rng_next(rng_t *r);
 
 static inline uint8_t card_suit(card_t c) { return c / 13; }
 static inline uint8_t card_rank(card_t c) { return c % 13; }   /* 0=A … 12=R */
-static inline uint8_t card_is_red(card_t c) { return card_suit(c) < 2; }
+static inline uint8_t card_is_red(card_t c) { uint8_t s = card_suit(c); return s == 1 || s == 2; }   /* ♥ ♦ */
 
 void deck_init(deck_t *d);
 void deck_shuffle(deck_t *d, rng_t *r);   /* Fisher-Yates */
