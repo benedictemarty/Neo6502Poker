@@ -25,6 +25,41 @@ colours, warm spotlight on the cards, subtle scanlines on the monitor. No modern
 UI, no photo-realism, no extra text.
 ```
 
+## Variante « art de 1984 » (millésime précis)
+
+```
+Vintage 1984 French home-computer game box art, the exact look of the year the
+Oric Atmos and the Amstrad CPC 464 were launched: airbrushed gouache and acrylic
+illustration, Letraset-style typography, printed on slightly yellowed cardboard.
+Portrait 3:4 cassette inlay.
+
+Scene: a night-time casino table lit by a single warm spotlight. Five giant
+playing cards fan toward the viewer — Ace of spades, King of hearts, Queen of
+diamonds, Jack of clubs, Ten of spades — with the stylised, slightly stiff
+court figures typical of 1984 illustration, red and black inks, hard-edged
+airbrush highlights and a faint halo glow around the cards. Red chips and
+gold coins scattered on emerald felt. In the far background, a perspective
+grid horizon in electric blue and magenta fades into a starry sky, with a
+small beige 8-bit microcomputer and its CRT monitor showing a green
+phosphor poker screen.
+
+Typography: "POKER" in enormous three-dimensional chrome letters with a
+horizontal blue-to-white gradient, bevelled edges and a thick black outline,
+the 1984 arcade-cabinet marquee look; underneath, "NEO6502" in a condensed
+futuristic sans-serif (Eurostile / Microgramma feel) in white. Small bottom
+strip: "Vidéo-poker — Bénédicte MARTY". Corner sticker: "K7 / 16 couleurs".
+
+Finish: visible airbrush grain, halftone dots on the flat colours, tiny
+registration imperfections, soft vignette, colours slightly faded like a
+40-year-old print. No pixel art, no photo-realism, no modern flat design,
+no extra text.
+```
+
+Repères de style 1984 pour orienter les retouches : jaquettes Loriciels,
+Infogrames et Ere Informatique de 1984, publicités Oric Atmos, marquees
+d'arcade (grille de perspective, chrome dégradé, halos), typographie
+Eurostile / Letraset.
+
 ## Variante « pixel art »
 
 ```
