@@ -64,6 +64,7 @@ void display_blit_slot(uint8_t slot, int16_t x, int16_t y) {
 
 void display_text(uint16_t x, uint16_t y, uint8_t colour, const char *s) {
     neo_graphics_set_color(colour);
+    neo_graphics_set_solid_flag(0);             /* texte sans fond */
     neo_graphics_draw_text(x, y, s);
 }
 

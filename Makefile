@@ -37,3 +37,15 @@ test: test-engine
 
 clean:
 	rm -rf $(BUILD)
+
+# --- émulateur Phosphoneo (~/Phosphoneo) --------------------------------------
+EMU ?= $(HOME)/Phosphoneo/build/phosphoneo
+SD  := $(BUILD)/sd
+
+run-emu: $(BUILD)/poker.neo
+	@mkdir -p $(SD) && cp assets/cards/48x64/cards.bin $(SD)/
+	$(EMU) $(BUILD)/poker.neo --storage $(SD)
+
+shot: $(BUILD)/poker.neo
+	@mkdir -p $(SD) && cp assets/cards/48x64/cards.bin $(SD)/
+	$(EMU) $(BUILD)/poker.neo --headless --storage $(SD) --cycles 60000000 --type-keys '6000000:MMD' --screenshot $(BUILD)/shot.ppm

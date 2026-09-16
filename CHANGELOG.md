@@ -2,6 +2,16 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.4.1] - 2026-09-16
+### Vérifié
+- `poker.neo` exécuté dans **Phosphoneo** (émulateur local headless) : chargement des cartes depuis
+  `cards.bin`, blitter, donne, écart, abattage — une manche complète validée par captures.
+### Ajouté
+- Tests golden `tests/test_emulator.py` (captures `tests/golden/*.ppm`, déterministes), cibles
+  `make run-emu` / `make shot`.
+### Corrigé
+- Texte dessiné sans fond noir ; alignement de la table des gains (printf llvm-mos sans largeur).
+
 ## [0.4.0] - 2026-09-16
 ### Ajouté
 - Chaîne C (llvm-mos, cible neo6502) : `Makefile`, `src/engine/` (cartes, évaluateur, vidéo-poker),
@@ -9,8 +19,6 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 - Tests natifs : énumération exhaustive des 2 598 960 mains (comptes de référence), cas des deux
   bugs ASN corrigés, machine à états ; intégrés à pytest.
 - `docs/ARCHITECTURE.md`.
-### Non vérifié
-- Exécution sur émulateur/matériel Neo6502 (aucun émulateur installé sur ce poste).
 
 ## [0.3.1] - 2026-09-16
 ### Corrigé

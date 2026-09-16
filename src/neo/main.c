@@ -2,6 +2,7 @@
  * 1-5 garder/changer une carte, Espace manche suivante, Q quitter. */
 #include <neo/api.h>
 #include <stdio.h>
+#include <string.h>
 #include "engine/videopoker.h"
 #include "neo/display.h"
 
@@ -16,8 +17,9 @@ static void draw_table(void) {
     display_clear_rect(0, 0, 319, 239, COL_GREEN);
     display_text(8, 8, COL_WHITE, "NEO6502 POKER");
     for (uint8_t i = 0; i < HAND_COUNT - 1; i++) {
-        snprintf(line, sizeof line, "%-14s %3u", hand_name[i + 1], hand_payout[i + 1]);
-        display_text(200, 8 + i * 9, COL_LIGHT, line);
+        display_text(200, 8 + i * 9, COL_LIGHT, hand_name[i + 1]);
+        snprintf(line, sizeof line, "%u", hand_payout[i + 1]);   /* aligné à droite, colonne 6 car. */
+        display_text(312 - 6 * (uint16_t)strlen(line), 8 + i * 9, COL_YELLOW, line);
     }
 }
 
