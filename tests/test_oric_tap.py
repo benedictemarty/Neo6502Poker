@@ -36,3 +36,15 @@ def test_detokenize_minimal_program():
     # 10 PRINT "A"   -> next(2) num(2) $BA '"' 'A' '"' 0 ; fin 0 0
     body = bytes([0x0B, 0x05, 10, 0, 0xBA, 0x22, 0x41, 0x22, 0, 0, 0])
     assert detokenize(body) == ['10 PRINT "A"']
+
+
+def test_parse_tap_asn():
+    tap = os.path.join(ROOT, "reference", "poker-oric", "POKER_ASN.tap")
+    f = parse_tap(open(tap, "rb").read())[0]
+    assert f["name"] == "POKER" and f["type"] == "BASIC"
+    assert (f["start"], f["end"]) == (0x0501, 0x1A99)
+    lines = detokenize(f["body"])
+    assert len(lines) == 179
+    assert lines[0].startswith("3 HIMEM #977F:CLEAR :TEXT :PAPER 0:INK 1:HIRES ")
+    bas = os.path.join(ROOT, "reference", "poker-oric", "POKER_ASN.bas")
+    assert lines == open(bas).read().splitlines()

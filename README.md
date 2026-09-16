@@ -5,6 +5,7 @@ inspiré des « Poker » édités pour l'Oric au début des années 80.
 
 ## Contenu
 
+- `docs/analyse-poker-asn.md` — analyse du Poker **ASN Diffusion** (vidéo-poker 52 cartes, 1983).
 - `docs/analyse-poker-oric.md` — analyse du Poker Oric de V. Talvas (Loriciels) : règles,
   évaluateur de mains, IA, graphismes, bugs.
 - `docs/PLAN_AGILE.md` — backlog et sprints.
@@ -15,6 +16,6 @@ inspiré des « Poker » édités pour l'Oric au début des années 80.
 
 ## Note sur « Poker ASN »
 
-Le Poker d'**ASN Diffusion** (oric.org n° 1760, 1983, Oric-1 seulement) n'est téléchargeable
-qu'avec un compte oric.org ; le seul Poker disponible publiquement (TOSEC) est celui de
-V. Talvas / Loriciels. Voir `docs/analyse-poker-oric.md` §1.
+Deux Poker Oric sont étudiés : celui d'**ASN Diffusion** (oric.org n° 1760, 1983, vidéo-poker
+52 cartes) et celui de V. Talvas / Loriciels (TOSEC, poker fermé à 2 joueurs). Ce sont deux
+programmes sans rapport ; voir `docs/analyse-poker-asn.md` §6 pour la comparaison.
