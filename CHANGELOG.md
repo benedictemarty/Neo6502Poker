@@ -2,6 +2,14 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.3.0] - 2026-09-16
+### Ajouté
+- Faces et dos de cartes open source (CC0, Dmitry Fomin) dans `assets/source/`.
+- `tools/make_cards.py` : conversion en 32×48 et 48×64 pour le Neo6502 mode 0 (palette 16 couleurs,
+  4 bpp) ; sorties PNG, `cards.bin` (53 images) et un `.gfx` par couleur (13 cartes + dos).
+- `docs/graphismes-neo6502.md` : contraintes du Neo6502 (mode 0, palette, format .gfx, 32 Ko) et format des sorties.
+- Tests `tests/test_cards_assets.py`.
+
 ## [0.2.0] - 2026-09-16
 ### Ajouté
 - Poker ASN Diffusion (oric.org n° 1760) fourni par l'utilisateur : TAP et listing dans

@@ -8,8 +8,11 @@ inspiré des « Poker » édités pour l'Oric au début des années 80.
 - `docs/analyse-poker-asn.md` — analyse du Poker **ASN Diffusion** (vidéo-poker 52 cartes, 1983).
 - `docs/analyse-poker-oric.md` — analyse du Poker Oric de V. Talvas (Loriciels) : règles,
   évaluateur de mains, IA, graphismes, bugs.
+- `docs/graphismes-neo6502.md` — contraintes graphiques du Neo6502 et génération des cartes.
 - `docs/PLAN_AGILE.md` — backlog et sprints.
-- `reference/poker-oric/` — TAP d'origine (TOSEC) et listing BASIC détokenisé.
+- `reference/poker-oric/` — TAP d'origine et listings BASIC détokenisés.
+- `assets/source/` — SVG CC0 des cartes (faces + dos) ; `assets/cards/` — cartes converties (PNG, `.bin`, `.gfx`).
+- `tools/make_cards.py` — génération des cartes pour le Neo6502 (mode 0, 4 bpp).
 - `tools/oric_tap.py` — lecteur TAP + détokeniseur BASIC Oric.
 - `tests/` — tests pytest (`python3 -m pytest -q tests`).
 - `CHANGELOG.md` — journal des modifications.
