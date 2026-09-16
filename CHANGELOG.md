@@ -2,6 +2,16 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.7.0] - 2026-09-16
+### Ajouté
+- **Aide intégrée** (`src/neo/help.c`), 4 pages en français ou anglais selon le sélecteur F/E :
+  comment jouer, l'écart, quitte ou double, les gains. Chaque page est illustrée par une
+  reproduction de la zone d'écran concernée dans un cadre « loupe » (barre de statut agrandie ×2,
+  vraies cartes avec GARDE/CHANGE, carte du pari, ligne de la table des gains).
+  Accès : H à l'écran-titre et pendant la mise ; Espace page suivante, Q retour.
+- Écran-titre : F/E change la langue immédiatement (textes retraduits), H aide, Espace joue.
+- Captures golden des 4 pages (FR), d'une page EN et du titre EN (21 tests).
+
 ## [0.6.0] - 2026-09-16
 ### Ajouté
 - **Quitte ou double** (règle ASN) : après un gain, Q encaisse ou D propose de deviner la couleur

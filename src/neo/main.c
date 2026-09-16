@@ -6,6 +6,7 @@
 #include "engine/videopoker.h"
 #include "neo/display.h"
 #include "neo/lang.h"
+#include "neo/help.h"
 
 #define DOUBLE_POS 2                 /* position de la carte du quitte ou double */
 static void sfx(uint8_t id) { neo_sound_play_effect(0, id); }
@@ -36,7 +37,18 @@ static void centered(uint16_t y, uint8_t colour, const char *s) {
     display_text((320 - 6 * (uint16_t)strlen(s)) / 2, y, colour, s);
 }
 
-static void title_screen(void) {
+static void title_texts(void) {
+    display_clear_rect(0, 144, 319, 239, COL_TABLE);
+    centered(148, COL_WHITE, lang == LANG_FR ? "Base sur le video-poker de la societe ASN (Oric 1)"
+                                             : "Based on the ASN video poker (Oric 1)");
+    centered(164, COL_WHITE, lang == LANG_FR ? "Programmation Benedicte MARTY" : "Programming Benedicte MARTY");
+    centered(174, COL_LIGHT, lang == LANG_FR ? "avec l'aide de Claude Code" : "with the help of Claude Code");
+    centered(198, COL_YELLOW, T(S_CHOOSE));
+    centered(212, COL_YELLOW, T(S_TITLE_HELP));
+    centered(226, COL_YELLOW, T(S_TITLE_PLAY));
+}
+
+static void title_draw(void) {
     display_clear_rect(0, 0, 319, 239, COL_TABLE);
     display_big_text(100 + 3, 12 + 3, COL_BLACK, 4, "POKER");     /* ombre */
     display_big_text(100, 12, COL_YELLOW, 4, "POKER");
@@ -45,14 +57,16 @@ static void title_screen(void) {
         display_blit_slot(i, 32 + i * 50, 56);
         display_wait_ticks(8);
     }
-    centered(148, COL_WHITE, "Base sur le video-poker de la societe ASN (Oric 1)");
-    centered(166, COL_WHITE, "Programmation Benedicte MARTY");
-    centered(176, COL_LIGHT, "avec l'aide de Claude Code");
-    centered(206, COL_YELLOW, T(S_CHOOSE));
+    title_texts();
+}
+
+static void title_screen(void) {
+    title_draw();
     for (;;) {
         char k = read_key();
-        if (k == 'F') { lang = LANG_FR; break; }
-        if (k == 'E') { lang = LANG_EN; break; }
+        if (k == 'F' || k == 'E') { lang = (k == 'F') ? LANG_FR : LANG_EN; title_texts(); }
+        else if (k == 'H') { help_show(); title_draw(); }
+        else if (k == ' ' || k == 13) break;
     }
 }
 
@@ -73,7 +87,7 @@ static void draw_status(void) {
     snprintf(line, sizeof line, "%s %3u   %s %2u", T(S_CREDIT), game.credit, T(S_BET), game.bet);
     display_text(8, STATUS_Y, COL_YELLOW, line);
     switch (game.state) {
-    case VP_BETTING:  display_text(8, STATUS_Y + 16, COL_WHITE, T(S_HELP_BET)); break;
+    case VP_BETTING:  display_text(8, STATUS_Y + 16, COL_WHITE, T(S_HELP_BET)); display_text(8, STATUS_Y + 28, COL_LIGHT, T(S_TITLE_HELP)); break;
     case VP_HOLDING:  display_text(8, STATUS_Y + 16, COL_WHITE, T(S_HELP_HOLD)); break;
     case VP_WON:
         if (game.double_card != CARD_BACK)
@@ -151,7 +165,8 @@ int main(void) {
         if (k == 'Q' && (game.state == VP_BETTING || game.state == VP_OVER)) break;   /* ailleurs Q = encaisser */
         switch (game.state) {
         case VP_BETTING:
-            if (k == 'M') { if (vp_bet_inc(&game)) sfx(API_SFX_COIN); else sfx(API_SFX_REJECT); }
+            if (k == 'H') { help_show(); draw_table(); for (uint8_t i = 0; i < HAND_SIZE; i++) display_blit_slot(i, card_x(i), HAND_Y); }
+            else if (k == 'M') { if (vp_bet_inc(&game)) sfx(API_SFX_COIN); else sfx(API_SFX_REJECT); }
             else if (k == 'C') vp_bet_cancel(&game);
             else if (k == 'D' && vp_deal(&game)) { sfx(API_SFX_CONFIRM); draw_status(); show_hand(); }
             break;

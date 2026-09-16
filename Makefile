@@ -5,7 +5,7 @@ HOST_CC  ?= gcc
 BUILD    := build
 
 ENGINE_SRC := src/engine/cards.c src/engine/hand.c src/engine/videopoker.c
-NEO_SRC    := src/neo/main.c src/neo/display.c src/neo/lang.c
+NEO_SRC    := src/neo/main.c src/neo/display.c src/neo/lang.c src/neo/help.c
 
 .PHONY: all neo test-engine test clean run run-emu shot
 

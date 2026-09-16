@@ -8,7 +8,8 @@ src/engine/   moteur pur C, sans dépendance matérielle — compilé en natif (
   videopoker.[ch]   machine à états : BETTING → HOLDING → (WON ⇄ DOUBLE) → SHOWDOWN → (BETTING | OVER)
 src/neo/      couche Neo6502 (API via neo/api.h et ControlPort)
   display.[ch]      chargement d'une carte depuis cards.bin (SD), blitter, retournement animé
-  lang.[ch]         textes français / anglais
+  lang.[ch]         textes français / anglais, pages d'aide
+  help.[ch]         aide illustrée (cadres « loupe » reproduisant des zones du jeu)
   main.c            écran-titre, boucle de jeu, clavier, dessin de la table
 tests/c/      tests natifs (exécutés par `make test-engine`, et via pytest `tests/test_engine_c.py`)
 ```

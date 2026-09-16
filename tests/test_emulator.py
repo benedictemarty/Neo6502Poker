@@ -38,14 +38,20 @@ def run(sd, keys, cycles, out, at=8_000_000):
 
 
 @pytest.mark.parametrize("name,keys,cycles,at", [
-    ("title", "", 7_000_000, 8_000_000),             # écran de présentation
-    ("holding", "FMMD", 60_000_000, 8_000_000),      # français, mise 2, donne
-    ("showdown", "FMMD5D", 90_000_000, 8_000_000),   # change la 5e carte, abattage
-    ("showdown_en", "EMMD5D", 90_000_000, 8_000_000),  # même partie en anglais
-    # graine différente (F à 9,35 M cycles) : full, 4 doublements gagnés (N N R R) puis encaissement
-    ("double_collect", "FMMDDDNDNDRDRDRQ", 60_000_000, 9_350_000),
+    ("title", "", 7_000_000, 8_000_000),             # écran de présentation (français)
+    ("title_en", "E", 12_000_000, 8_000_000),        # écran de présentation en anglais
+    ("help1", "H", 16_000_000, 8_000_000),           # pages d'aide
+    ("help2", "H ", 16_000_000, 8_000_000),
+    ("help3", "H  ", 16_000_000, 8_000_000),
+    ("help4", "H   ", 16_000_000, 8_000_000),
+    ("help3_en", "EH  ", 16_000_000, 8_000_000),
+    ("holding", "F MMD", 60_000_000, 8_000_000),     # français, mise 2, donne
+    ("showdown", "F MMD5D", 90_000_000, 8_000_000),  # change la 5e carte, abattage
+    ("showdown_en", "E MMD5D", 90_000_000, 8_000_000),  # même partie en anglais
+    # graine différente (espace à 9,35 M cycles) : full, 4 doublements gagnés puis encaissement
+    ("double_collect", " MMDDDNDNDRDRDRQ", 60_000_000, 9_350_000),
     # même donne, 4e pari perdu (N sur un K de carreau)
-    ("double_lost", "FMMDDDNDNDRDRDN", 60_000_000, 9_350_000),
+    ("double_lost", " MMDDDNDNDRDRDN", 60_000_000, 9_350_000),
 ])
 def test_golden(sd, name, keys, cycles, at, tmp_path):
     out = str(tmp_path / f"{name}.ppm")

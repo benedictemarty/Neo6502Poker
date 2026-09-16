@@ -8,7 +8,7 @@ inspiré des « Poker » édités pour l'Oric au début des années 80.
 ```
 make neo           # binaire Neo6502 (llvm-mos dans ~/llvm-mos)
 make test          # tests natifs C + pytest (dont captures golden sur Phosphoneo)
-make run           # jouer dans l'émulateur officiel neo (SDL2)
+make run           # jouer dans l'émulateur officiel neo (SDL2) — H : aide intégrée FR/EN
 ```
 Voir `docs/ARCHITECTURE.md`.
 
