@@ -2,6 +2,10 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.7.1] - 2026-09-16
+### Ajouté
+- `docs/JAQUETTE.md` : prompts (EN/FR, variante pixel art) pour générer la jaquette avec Nano Banana.
+
 ## [0.7.0] - 2026-09-16
 ### Ajouté
 - **Aide intégrée** (`src/neo/help.c`), 4 pages en français ou anglais selon le sélecteur F/E :
