@@ -3,7 +3,7 @@
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
 ## [0.9.3] - 2026-09-19
-### Corrigé (à confirmer sur carte)
+### Corrigé — **validé sur carte le 2026-09-19** (Trinity 0.2.0, clé USB, lancement par ProphetGui)
 - Sur la carte (Trinity 0.2.0), avec 0.9.2 les cartes sont bonnes mais **tous les textes graphiques
   sont vides ou faux** ; les émulateurs sont corrects. Le SDK (`neo_graphics_draw_text`) construit la
   chaîne longueur-préfixée sur la pile logicielle (`$F5xx`) ; ProphetGui, correct sur la même carte,
