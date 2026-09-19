@@ -62,3 +62,21 @@ def test_golden(sd, name, keys, cycles, at, tmp_path):
     got = run(sd, keys, cycles, out, at)
     ref = open(os.path.join(GOLDEN, f"{name}.ppm"), "rb").read()
     assert got == ref, f"capture différente de tests/golden/{name}.ppm (voir {out})"
+
+
+def test_cards_in_package_folder(tmp_path):
+    """cards.bin absent du répertoire courant mais présent dans poker/ (paquet Prophet lancé
+    par ProphetGui sans changement de répertoire) : l'écran-titre est identique."""
+    subprocess.run(["make", "-s", "neo"], cwd=ROOT, check=True)
+    d = tmp_path / "storage"; (d / "poker").mkdir(parents=True)
+    shutil.copy(CARDS, d / "poker")
+    got = run(str(d), "", 7_000_000, str(tmp_path / "sub.ppm"))
+    assert got == open(os.path.join(GOLDEN, "title.ppm"), "rb").read()
+
+
+def test_cards_missing(tmp_path):
+    """Sans cards.bin nulle part : message explicite (golden nocards) au lieu de cartes brouillées."""
+    subprocess.run(["make", "-s", "neo"], cwd=ROOT, check=True)
+    d = tmp_path / "storage"; d.mkdir()
+    got = run(str(d), "", 7_000_000, str(tmp_path / "nocards.ppm"))
+    assert got == open(os.path.join(GOLDEN, "nocards.ppm"), "rb").read()

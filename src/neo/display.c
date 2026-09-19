@@ -17,6 +17,8 @@ struct blitter_area {
 
 static uint8_t slots[CARD_SLOTS][CARD_BYTES];
 static struct blitter_area area;
+static const char *const cards_paths[] = CARDS_PATHS;
+static const char *cards_file;   /* chemin retenu par display_find_cards */
 
 static void api_call(uint8_t group, uint8_t function) {
     ControlPort.function = function;
@@ -30,9 +32,17 @@ void display_init(void) {
     neo_graphics_set_defaults(0xFF, 0x00, 1, 1, 0);
 }
 
+const char *display_find_cards(void) {
+    for (uint8_t i = 0; i < sizeof cards_paths / sizeof *cards_paths; i++) {
+        neo_file_open(1, cards_paths[i], 0);
+        if (!neo_api_error()) { neo_file_close(1); cards_file = cards_paths[i]; return cards_file; }
+    }
+    return NULL;
+}
+
 uint8_t display_load_card(uint8_t slot, uint8_t card) {
-    if (slot >= CARD_SLOTS || card > CARD_BACK) return 0;
-    neo_file_open(1, CARDS_FILE, 0);            /* lecture seule */
+    if (slot >= CARD_SLOTS || card > CARD_BACK || !cards_file) return 0;
+    neo_file_open(1, cards_file, 0);            /* lecture seule */
     if (neo_api_error()) return 0;
     neo_file_seek(1, (uint32_t)card * CARD_BYTES);
     uint16_t n = neo_file_read(1, slots[slot], CARD_BYTES);

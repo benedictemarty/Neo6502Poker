@@ -13,6 +13,8 @@ make test          # tests natifs C + pytest (dont captures golden sur Phosphone
 make run           # jouer dans l'émulateur officiel neo (SDL2) — H : aide intégrée FR/EN
 make diag          # diagnostic du stockage pour la carte réelle (tools/diag/README.md)
 ```
+Sur la carte : `cards.bin` doit être dans le répertoire courant ou dans `poker/` (paquet Prophet) ;
+sinon le jeu affiche « cards.bin introuvable ».
 Voir `docs/ARCHITECTURE.md`.
 
 ## Contenu

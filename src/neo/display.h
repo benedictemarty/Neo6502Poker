@@ -9,7 +9,9 @@
 #define CARD_BYTES (CARD_W * CARD_H / 2)   /* 4 bpp */
 #define SLOT_BACK 5                        /* dos, chargé une fois */
 #define CARD_SLOTS 6
-#define CARDS_FILE "cards.bin"             /* assets/cards/56x80/cards.bin copié sur la SD */
+/* assets/cards/56x80/cards.bin, cherché dans le répertoire courant puis dans le dossier du paquet
+ * Prophet (ProphetGui lance le .neo sans changer de répertoire). */
+#define CARDS_PATHS { "cards.bin", "poker/cards.bin", "games/poker/cards.bin" }
 
 /* Palette Neo6502. */
 #define COL_RED 1
@@ -21,6 +23,7 @@
 #define COL_TABLE COL_GREEN
 
 void display_init(void);
+const char *display_find_cards(void);                    /* chemin de cards.bin trouvé, ou NULL */
 uint8_t display_load_card(uint8_t slot, uint8_t card);   /* card 0..51 ou CARD_BACK */
 void display_blit_slot(uint8_t slot, int16_t x, int16_t y);
 /* Retournement simultané de n cartes : les images des slots se referment, les cartes `card`

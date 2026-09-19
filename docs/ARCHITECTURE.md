@@ -7,7 +7,7 @@ src/engine/   moteur pur C, sans dépendance matérielle — compilé en natif (
   hand.[ch]         évaluateur 5 cartes + table de gains ASN (paire habillée V/D/R/A … flush royale)
   videopoker.[ch]   machine à états : BETTING → HOLDING → (WON ⇄ DOUBLE) → SHOWDOWN → (BETTING | OVER)
 src/neo/      couche Neo6502 (API via neo/api.h et ControlPort)
-  display.[ch]      chargement d'une carte depuis cards.bin (SD), blitter, retournement animé
+  display.[ch]      recherche de cards.bin (CARDS_PATHS : ., poker/, games/poker/), chargement d'une carte, blitter, retournement animé
   lang.[ch]         textes français / anglais, pages d'aide
   help.[ch]         aide illustrée (cadres « loupe » reproduisant des zones du jeu)
   main.c            écran-titre, boucle de jeu, clavier, dessin de la table

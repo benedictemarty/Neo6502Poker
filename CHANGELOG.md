@@ -2,11 +2,22 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.9.2] - 2026-09-19
+### Corrigé
+- **Carte réelle : cartes brouillées** — `diag.neo` sur la carte (Trinity 0.2.0) a donné `IMAGE 1714 1505`
+  (le `.neo` se charge bien) puis `OPEN ERR 11` (`FIOERROR_NO_FILE`) : `cards.bin` n'est pas dans le
+  répertoire courant, car ProphetGui télécharge le paquet dans `poker/` et lance le `.neo` sans changer
+  de répertoire. L'échec d'ouverture était silencieux. Désormais `display_find_cards()` cherche
+  `cards.bin`, `poker/cards.bin` puis `games/poker/cards.bin` (`CARDS_PATHS`), et sans fichier le jeu
+  affiche un message FR/EN explicite (Q quitter) au lieu de cartes brouillées. Tests : titre identique
+  avec `poker/cards.bin`, golden `nocards` (29 tests).
+- Les textes brouillés de l'écran-titre restent inexpliqués par ce seul défaut : à revérifier avec 0.9.2.
+
 ## [0.9.1] - 2026-09-19
 ### Anomalie ouverte
 - Sur la carte réelle : cartes brouillées et textes de l'écran-titre illisibles (`with the help of
   Claude Code` correct, puis les chaînes de `lang.c` en caractères aléatoires) ; `neo` et Phosphoneo
-  sont corrects. Cause non identifiée à distance.
+  sont corrects. Résolu en 0.9.2 (cards.bin introuvable).
 ### Ajouté
 - `tools/diag/diag.c` → `build/diag.neo` (`make diag`) : empreintes 16 bits de l'image `.neo` chargée
   en RAM, de chaque carte lue comme le jeu (seek + bloc de 2240 octets), de la carte 0 lue octet par

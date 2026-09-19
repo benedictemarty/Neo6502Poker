@@ -25,7 +25,7 @@ make test            # tests/test_diag.py vérifie que Phosphoneo donne ces vale
 | `Cnn hash` | chaque carte : seek + lecture d'un bloc de 2240 octets (le chemin du jeu) | lecture par blocs non alignés sur les secteurs (FatFs `FF_FS_TINY`, pilote MSC) |
 | `BYTES` | carte 0 relue octet par octet | lecture par octet (celle du chargeur) |
 | `SEQ` | tout le fichier par blocs de 512 octets | lecture alignée / multi-secteurs |
-| `OPEN ERR xx` | le fichier ne s'ouvre pas | `cards.bin` absent à la racine (le jeu affiche alors des cartes noires) |
+| `OPEN ERR 11` | le fichier ne s'ouvre pas (`11` = introuvable) | `cards.bin` absent du répertoire courant — cas constaté sur carte le 2026-09-19 (paquet Prophet lancé depuis `poker/`) ; le jeu ≥ 0.9.2 cherche aussi `poker/cards.bin` et affiche un message sinon |
 
 Une différence sur `IMAGE` seule explique les textes brouillés du jeu (tables de chaînes
 mal chargées) ; une différence sur les `Cnn` seuls explique les cartes brouillées.

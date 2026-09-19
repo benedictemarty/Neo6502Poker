@@ -170,8 +170,22 @@ static void show_double(void) {
     show_cards(view);
 }
 
+/* Sans cards.bin, on s'arrête sur un message plutôt que d'afficher des cartes brouillées. */
+static void missing_cards(void) {
+    display_clear_rect(0, 0, 319, 239, COL_TABLE);
+    display_big_text(8, 8, COL_YELLOW, 2, "POKER");
+    display_text(8, 40, COL_WHITE, "cards.bin introuvable / not found.");
+    display_text(8, 56, COL_LIGHT, "Copiez cards.bin dans le repertoire courant");
+    display_text(8, 66, COL_LIGHT, "ou dans poker/ (paquet Prophet).");
+    display_text(8, 82, COL_LIGHT, "Copy cards.bin to the current directory");
+    display_text(8, 92, COL_LIGHT, "or to poker/ (Prophet package).");
+    display_text(8, 116, COL_YELLOW, T(S_QUIT));
+    while (read_key() != 'Q') { }
+}
+
 int main(void) {
     display_init();
+    if (!display_find_cards()) { missing_cards(); neo_console_clear_screen(); return 1; }
     display_load_card(SLOT_BACK, CARD_BACK);
     title_screen();
     vp_init(&game, (uint16_t)neo_system_timer());
