@@ -7,7 +7,7 @@ BUILD    := build
 ENGINE_SRC := src/engine/cards.c src/engine/hand.c src/engine/videopoker.c
 NEO_SRC    := src/neo/main.c src/neo/display.c src/neo/lang.c src/neo/help.c
 
-.PHONY: all neo test-engine test clean run run-emu shot
+.PHONY: all neo diag test-engine test clean run run-emu shot
 
 all: neo
 
@@ -17,6 +17,15 @@ neo: $(BUILD)/poker.neo
 $(BUILD)/poker.neo: $(ENGINE_SRC) $(NEO_SRC) src/engine/*.h src/neo/*.h
 	@mkdir -p $(BUILD)
 	$(NEO_CC) -Os -Wall -Isrc -o $@ $(ENGINE_SRC) $(NEO_SRC)
+	@ls -l $@
+
+# --- diagnostic du stockage sur carte (tools/diag/README.md) -----------------
+diag: $(BUILD)/diag.neo
+	python3 tools/diag/expected.py $(BUILD)/diag.neo
+
+$(BUILD)/diag.neo: tools/diag/diag.c
+	@mkdir -p $(BUILD)
+	$(NEO_CC) -Os -Wall -o $@ $<
 	@ls -l $@
 
 # --- tests natifs du moteur ---------------------------------------------------

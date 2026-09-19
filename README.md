@@ -11,6 +11,7 @@ inspiré des « Poker » édités pour l'Oric au début des années 80.
 make neo           # binaire Neo6502 (llvm-mos dans ~/llvm-mos)
 make test          # tests natifs C + pytest (dont captures golden sur Phosphoneo)
 make run           # jouer dans l'émulateur officiel neo (SDL2) — H : aide intégrée FR/EN
+make diag          # diagnostic du stockage pour la carte réelle (tools/diag/README.md)
 ```
 Voir `docs/ARCHITECTURE.md`.
 
@@ -27,6 +28,8 @@ Voir `docs/ARCHITECTURE.md`.
 - `assets/source/` — SVG CC0 des cartes (faces + dos) ; `assets/cards/` — cartes converties (PNG, `.bin`, `.gfx`).
 - `tools/make_cards.py` — génération des cartes pour le Neo6502 (mode 0, 4 bpp).
 - `tools/oric_tap.py` — lecteur TAP + détokeniseur BASIC Oric.
+- `tools/diag/` — `diag.neo` : empreintes du `.neo` chargé et de `cards.bin` lus sur la carte, à comparer
+  avec `make diag` (cartes ou textes brouillés sur la carte réelle).
 - `tests/` — tests pytest (`python3 -m pytest -q tests`).
 - `CHANGELOG.md` — journal des modifications.
 

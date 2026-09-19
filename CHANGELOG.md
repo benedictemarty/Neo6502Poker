@@ -2,6 +2,17 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.9.1] - 2026-09-19
+### Anomalie ouverte
+- Sur la carte réelle : cartes brouillées et textes de l'écran-titre illisibles (`with the help of
+  Claude Code` correct, puis les chaînes de `lang.c` en caractères aléatoires) ; `neo` et Phosphoneo
+  sont corrects. Cause non identifiée à distance.
+### Ajouté
+- `tools/diag/diag.c` → `build/diag.neo` (`make diag`) : empreintes 16 bits de l'image `.neo` chargée
+  en RAM, de chaque carte lue comme le jeu (seek + bloc de 2240 octets), de la carte 0 lue octet par
+  octet et du fichier lu par blocs de 512 ; `tools/diag/expected.py` imprime les valeurs attendues,
+  `tests/test_diag.py` vérifie que Phosphoneo les reproduit (27 tests). Mode d'emploi : `tools/diag/README.md`.
+
 ## [0.9.0] - 2026-09-16
 ### Ajouté
 - À l'abattage gagnant : après le son (victoire, fanfare dès le carré), la ligne de la combinaison

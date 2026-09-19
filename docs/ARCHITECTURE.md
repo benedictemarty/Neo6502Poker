@@ -12,6 +12,8 @@ src/neo/      couche Neo6502 (API via neo/api.h et ControlPort)
   help.[ch]         aide illustrée (cadres « loupe » reproduisant des zones du jeu)
   main.c            écran-titre, boucle de jeu, clavier, dessin de la table
 tests/c/      tests natifs (exécutés par `make test-engine`, et via pytest `tests/test_engine_c.py`)
+tools/diag/   diag.c : diagnostic du stockage sur carte (empreintes de l'image chargée et de cards.bin),
+              expected.py : valeurs attendues ; tests/test_diag.py les vérifie dans Phosphoneo
 ```
 
 ## Identifiants de cartes
