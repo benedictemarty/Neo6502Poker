@@ -2,6 +2,17 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [0.9.3] - 2026-09-19
+### Corrigé (à confirmer sur carte)
+- Sur la carte (Trinity 0.2.0), avec 0.9.2 les cartes sont bonnes mais **tous les textes graphiques
+  sont vides ou faux** ; les émulateurs sont corrects. Le SDK (`neo_graphics_draw_text`) construit la
+  chaîne longueur-préfixée sur la pile logicielle (`$F5xx`) ; ProphetGui, correct sur la même carte,
+  la met dans un tampon statique. Cause non élucidée : `display_big_text` passe désormais par un
+  tampon statique en RAM basse (`neo_graphics_draw_text_p`) et attend la fin de la commande.
+  Captures golden inchangées (29 tests).
+- `diag.neo` : après `END`, deux textes graphiques (`A: PILE SDK`, `B: TAMPON STATIQUE`) pour
+  désigner le chemin fautif sur carte.
+
 ## [0.9.2] - 2026-09-19
 ### Corrigé
 - **Carte réelle : cartes brouillées** — `diag.neo` sur la carte (Trinity 0.2.0) a donné `IMAGE 1714 1505`

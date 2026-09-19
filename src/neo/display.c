@@ -103,11 +103,22 @@ void display_text(uint16_t x, uint16_t y, uint8_t colour, const char *s) {
     display_big_text(x, y, colour, 1, s);
 }
 
+/* Chaîne longueur-préfixée dans un tampon statique en RAM basse : le SDK (`neo_graphics_draw_text`)
+ * la construit sur la pile logicielle vers $F5xx, ce qui donne des textes faux sur la carte réelle
+ * (Trinity 0.2.0, 2026-09-19) alors que les émulateurs sont corrects ; ProphetGui, qui utilise un
+ * tampon statique, affiche bien. Cause non élucidée, la différence est supprimée. */
+static struct { uint8_t length; char data[63]; } ptext;
+
 void display_big_text(uint16_t x, uint16_t y, uint8_t colour, uint8_t size, const char *s) {
+    uint8_t n = 0;
+    while (s[n] && n < sizeof ptext.data) { ptext.data[n] = s[n]; n++; }
+    if (!n) return;
+    ptext.length = n;
     neo_graphics_set_color(colour);
     neo_graphics_set_solid_flag(0);             /* texte sans fond */
     neo_graphics_set_draw_size(size);
-    neo_graphics_draw_text(x, y, s);
+    neo_graphics_draw_text_p(x, y, (const neo_pstring_t *)&ptext);
+    while (ControlPort.command != 0) { }        /* la chaîne doit rester lisible jusqu'à la fin */
     neo_graphics_set_draw_size(1);
 }
 

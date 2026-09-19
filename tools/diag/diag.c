@@ -12,6 +12,10 @@
  *   BYTES   hash      carte 0 relue octet par octet (chemin du chargeur .neo)
  *   SEQ     hash      tout le fichier lu séquentiellement par blocs de 512 octets
  *   END
+ * Puis deux textes graphiques en bas de l'écran (test de Draw Text, 5,6) :
+ *   A: PILE SDK        chaîne construite sur la pile logicielle par neo_graphics_draw_text
+ *   B: TAMPON STATIQUE chaîne dans un tampon statique en RAM basse (neo_graphics_draw_text_p)
+ * Sur carte, si l'un des deux est illisible ou vide, c'est le chemin fautif du jeu.
  */
 #include <neo/api.h>
 #include <stdio.h>
@@ -25,6 +29,7 @@ extern char _start[];          /* adresse de chargement du .neo (0x0200) */
 extern char __data_end[];      /* fin de l'image chargée (code + rodata + data) */
 
 static uint8_t buf[CARD_BYTES];
+static struct { uint8_t length; char data[24]; } ptext = { 18, "B: TAMPON STATIQUE" };
 static uint16_t image_hash;
 
 /* Empreinte sensible à l'ordre : h = h*31 + octet (mod 65536). */
@@ -82,5 +87,13 @@ int main(void) {
     printf("SEQ %04X\n", h);
     neo_file_close(1);
     printf("END\n");
+
+    /* Test de Draw Text : les deux façons de passer la chaîne. */
+    neo_graphics_set_defaults(0xFF, 0x00, 1, 1, 0);
+    neo_graphics_set_color(7);
+    neo_graphics_set_solid_flag(0);
+    neo_graphics_set_draw_size(1);
+    neo_graphics_draw_text(8, 216, "A: PILE SDK");
+    neo_graphics_draw_text_p(8, 228, (const neo_pstring_t *)&ptext);
     for (;;) { }
 }

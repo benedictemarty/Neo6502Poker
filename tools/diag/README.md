@@ -27,5 +27,9 @@ make test            # tests/test_diag.py vérifie que Phosphoneo donne ces vale
 | `SEQ` | tout le fichier par blocs de 512 octets | lecture alignée / multi-secteurs |
 | `OPEN ERR 11` | le fichier ne s'ouvre pas (`11` = introuvable) | `cards.bin` absent du répertoire courant — cas constaté sur carte le 2026-09-19 (paquet Prophet lancé depuis `poker/`) ; le jeu ≥ 0.9.2 cherche aussi `poker/cards.bin` et affiche un message sinon |
 
+Après `END`, deux textes graphiques en bas de l'écran testent Draw Text (5,6) : `A: PILE SDK`
+(chaîne construite sur la pile logicielle par le SDK) et `B: TAMPON STATIQUE` (tampon statique en
+RAM basse, méthode de ProphetGui et du jeu ≥ 0.9.3). Noter lequel est lisible.
+
 Une différence sur `IMAGE` seule explique les textes brouillés du jeu (tables de chaînes
 mal chargées) ; une différence sur les `Cnn` seuls explique les cartes brouillées.
