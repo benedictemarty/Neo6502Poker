@@ -111,7 +111,6 @@ static const char *const HELP_EN_4[] = {
 
 static const char *const HELP_FR_5[] = {
     "JEU        Programmation Benedicte MARTY, 2026,",
-    "           avec l'aide de Claude Code (Anthropic).",
     "           D'apres le video-poker d'ASN Diffusion",
     "           pour Oric 1 (1983). Licence EUPL-1.2.",
     "MACHINE    Neo6502 : carte Olimex (W65C02S + RP2040),",
@@ -125,7 +124,6 @@ static const char *const HELP_FR_5[] = {
     NULL };
 static const char *const HELP_EN_5[] = {
     "GAME       Programming Benedicte MARTY, 2026,",
-    "           with the help of Claude Code (Anthropic).",
     "           After the ASN Diffusion video poker",
     "           for the Oric 1 (1983). EUPL-1.2 licence.",
     "MACHINE    Neo6502: Olimex board (W65C02S + RP2040),",

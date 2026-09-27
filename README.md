@@ -46,3 +46,7 @@ l'aide intégrée (touche H) reprend ces crédits en français et en anglais.
 Deux Poker Oric sont étudiés : celui d'**ASN Diffusion** (oric.org n° 1760, 1983, vidéo-poker
 52 cartes) et celui de V. Talvas / Loriciels (TOSEC, poker fermé à 2 joueurs). Ce sont deux
 programmes sans rapport ; voir `docs/analyse-poker-asn.md` §6 pour la comparaison.
+
+## Avertissement
+
+⚠️ Avertissement : ce programme est un programme généré par Claude Code sous la supervision d'un être humain : il a été utilisé pour améliorer, développer, rendre compatible ou traduire ce logiciel.

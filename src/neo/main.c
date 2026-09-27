@@ -42,7 +42,6 @@ static void title_texts(void) {
     centered(148, COL_WHITE, lang == LANG_FR ? "Base sur le video-poker de la societe ASN (Oric 1)"
                                              : "Based on the ASN video poker (Oric 1)");
     centered(164, COL_WHITE, lang == LANG_FR ? "Programmation Benedicte MARTY" : "Programming Benedicte MARTY");
-    centered(174, COL_LIGHT, lang == LANG_FR ? "avec l'aide de Claude Code" : "with the help of Claude Code");
     centered(198, COL_YELLOW, T(S_CHOOSE));
     centered(212, COL_YELLOW, T(S_TITLE_HELP));
     centered(226, COL_YELLOW, T(S_TITLE_PLAY));

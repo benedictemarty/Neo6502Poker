@@ -1,8 +1,8 @@
 # Crédits
 
 ## Logiciel
-- **Neo6502Poker** — programmation Bénédicte MARTY (bmarty <bmarty@mailo.com>), 2026, avec l'aide de
-  Claude Code (Anthropic). Licence EUPL-1.2.
+- **Neo6502Poker** — programmation Bénédicte MARTY (bmarty <bmarty@mailo.com>), 2026.
+  Licence EUPL-1.2.
 - D'après le **vidéo-poker d'ASN Diffusion** pour Oric 1 (1983), étudié dans `docs/analyse-poker-asn.md` ;
   le Poker de V. Talvas / Loriciels a servi de seconde référence (`docs/analyse-poker-oric.md`).
 
